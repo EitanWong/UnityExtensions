@@ -1,0 +1,18 @@
+{
+    "name": "MeshEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a09b502a3463f794a83cf80a67a246d2"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
