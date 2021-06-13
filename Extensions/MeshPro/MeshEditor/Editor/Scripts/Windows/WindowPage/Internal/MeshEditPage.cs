@@ -311,12 +311,23 @@ public class MeshEditPage : MEDR_Page
                 break;
             case MeshEditMode.Edge:
                 var edge_size = 1f * config.MEDR_MeshEdit_EdgeSize_Multiplier;
-                Handles.DrawLine(_mouseHoverFace.m_edge1.m_vertex1.m_vertex,
+#if UNITY_2020_1_OR_NEWER
+Handles.DrawLine(_mouseHoverFace.m_edge1.m_vertex1.m_vertex,
                     _mouseHoverFace.m_edge1.m_vertex2.m_vertex, edge_size);
                 Handles.DrawLine(_mouseHoverFace.m_edge2.m_vertex1.m_vertex,
                     _mouseHoverFace.m_edge2.m_vertex2.m_vertex, edge_size);
                 Handles.DrawLine(_mouseHoverFace.m_edge3.m_vertex1.m_vertex,
                     _mouseHoverFace.m_edge3.m_vertex2.m_vertex, edge_size);
+#else
+                Handles.DrawLine(_mouseHoverFace.m_edge1.m_vertex1.m_vertex,
+                    _mouseHoverFace.m_edge1.m_vertex2.m_vertex);
+                Handles.DrawLine(_mouseHoverFace.m_edge2.m_vertex1.m_vertex,
+                    _mouseHoverFace.m_edge2.m_vertex2.m_vertex);
+                Handles.DrawLine(_mouseHoverFace.m_edge3.m_vertex1.m_vertex,
+                    _mouseHoverFace.m_edge3.m_vertex2.m_vertex);
+#endif
+
+
                 break;
             case MeshEditMode.Face:
                 Handles.DrawSolidRectangleWithOutline(_mouseHoverFace.m_faceVertex, Handles.color,
@@ -688,8 +699,12 @@ public class MeshEditPage : MEDR_Page
         Handles.color = config.MEDR_MeshEdit_ClickColor;
         foreach (var edge in edit_EdgeCache)
         {
-            Handles.DrawLine(edge.m_vertex1.m_vertex, edge.m_vertex2.m_vertex,
+#if UNITY_2020_1_OR_NEWER
+Handles.DrawLine(edge.m_vertex1.m_vertex, edge.m_vertex2.m_vertex,
                 2f * config.MEDR_MeshEdit_EdgeSize_Multiplier);
+#elif UNITY_2019
+            Handles.DrawLine(edge.m_vertex1.m_vertex, edge.m_vertex2.m_vertex);
+#endif
         }
     }
 

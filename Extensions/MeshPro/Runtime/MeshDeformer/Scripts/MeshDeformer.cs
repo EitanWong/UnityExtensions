@@ -33,7 +33,9 @@ namespace UnityExtensions.MeshPro.Runtime.MeshDeformer
             mesh.RecalculateNormals();
             mesh.SetVertices(vertices);
             mesh.RecalculateTangents();
+#if UNITY_2020_1_OR_NEWER
             mesh.RecalculateUVDistributionMetrics();
+#endif
         }
     }
 }

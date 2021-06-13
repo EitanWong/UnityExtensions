@@ -318,7 +318,7 @@ namespace TransformPro.Scripts
                 var sceneView = (SceneView) SceneView.sceneViews[0];
                 if (sceneView)
                 {
-                    sceneView.ShowNotification(new GUIContent("无法生成盒形碰撞器\n对象没有碰撞器或渲染器的边界"), 1f);
+                    sceneView.ShowNotification(new GUIContent("无法生成盒形碰撞器\n对象没有碰撞器或渲染器的边界"));
                 }
 
                 //Debug.LogWarning("[<color=red>TransformPro</color>] Cannot generate a box collider. Object has no collider or renderer bounds.");
@@ -348,7 +348,7 @@ namespace TransformPro.Scripts
                 var sceneView = (SceneView) SceneView.sceneViews[0];
                 if (sceneView)
                 {
-                    sceneView.ShowNotification(new GUIContent("无法生成胶囊碰撞器\n对象没有碰撞器或渲染器的边界"), 1f);
+                    sceneView.ShowNotification(new GUIContent("无法生成胶囊碰撞器\n对象没有碰撞器或渲染器的边界"));
                 }
 
                 //Debug.LogWarning("[<color=red>TransformPro</color>] Cannot generate a capsule collider. Object has no collider or renderer bounds.");

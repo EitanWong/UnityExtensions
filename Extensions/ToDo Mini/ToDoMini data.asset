@@ -69,7 +69,7 @@ MonoBehaviour:
   - task: "Toolbar PrefabBrush\u56FE\u6807\u66F4\u6362"
     isComplete: 1
   - task: "ObjectClipboard\u6C49\u5316"
-    isComplete: 0
+    isComplete: 1
   - task: "README\u6587\u4EF6\u521B\u5EFA"
     isComplete: 0
   - task: "\u5F55\u5236\u63D2\u4EF6\u4ECB\u7ECD\u89C6\u9891"

@@ -17,7 +17,7 @@ namespace TransformPro.MeshPro.MeshEditor.Editor
 
         private static List<MeshEditorItem> itemsPool = new List<MeshEditorItem>(); //MeshField池
         public static List<MeshEditorItem> CheckItems = new List<MeshEditorItem>(); //选中的MeshField
-        private static List<MEDR_Page> editorPages=new List<MEDR_Page>(); //编辑器页面
+        private static List<MEDR_Page> editorPages = new List<MEDR_Page>(); //编辑器页面
         private static Vector2 scrollPos; //Scroll位置
         public static MeshEditorWindow window; //当前窗体
 
@@ -324,7 +324,11 @@ namespace TransformPro.MeshPro.MeshEditor.Editor
             if (Event.current.keyCode == KeyCode.Escape)
             {
                 var editorWindow = EditorWindow.mouseOverWindow;
+#if UNITY_2020_1_OR_NEWER
                 if (editorWindow && !editorWindow.docked && editorWindow == this)
+#else
+                if (editorWindow && !editorWindow && editorWindow == this)
+#endif
                 {
                     Close();
                     Event.current.keyCode = KeyCode.None;

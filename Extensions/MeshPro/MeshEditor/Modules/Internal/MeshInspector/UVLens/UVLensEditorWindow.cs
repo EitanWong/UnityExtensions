@@ -68,7 +68,7 @@ public class UVLensEditorWindow : EditorWindow
     //     window.minSize = Vector2.one * 150;
     //     ((UVLensEditorWindow)window).ResetMesh();
     // }
-    public  void Open()
+    public void Open()
     {
         EditorWindow window = GetWindow(typeof(UVLensEditorWindow), true);
         window.titleContent = new GUIContent("❏ UV 检查器");
@@ -189,7 +189,11 @@ public class UVLensEditorWindow : EditorWindow
         if (Event.current.keyCode == KeyCode.Escape)
         {
             var editorWindow = EditorWindow.mouseOverWindow;
-            if (editorWindow && !editorWindow.docked && editorWindow == this)
+#if UNITY_2020_1_OR_NEWER
+                if (editorWindow && !editorWindow.docked && editorWindow == this)
+#else
+            if (editorWindow && !editorWindow && editorWindow == this)
+#endif
             {
                 Close();
                 Event.current.keyCode = KeyCode.None;
