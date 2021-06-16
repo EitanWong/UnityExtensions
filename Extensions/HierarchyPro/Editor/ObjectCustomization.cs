@@ -109,7 +109,7 @@ namespace HierarchyPro.Editor
         {
             rootVisualElement.StyleMargin(4, 4, 2, 0);
 
-            hierarchyLocalData = HierarchyEditor.Instance.GetHierarchyLocalData(Selection.activeGameObject.scene);
+            hierarchyLocalData = HierarchyProEditor.Instance.GetHierarchyLocalData(Selection.activeGameObject.scene);
             gameObject = Selection.activeGameObject;
             Selection.activeGameObject = null;
 

@@ -19,8 +19,7 @@ namespace PrefabBrush.PrefabBrushUI
         private PB_SaveOptions activeSaveOption = PB_SaveOptions.New;
         private PB_ActiveTab previousTab = PB_ActiveTab.PrefabPaint;
 
-        [SerializeField]
-        private PB_SaveObject activeSave;
+        [SerializeField] private PB_SaveObject activeSave;
         public PB_SaveObject loadedSave;
 
         //Foldout bools
@@ -47,8 +46,7 @@ namespace PrefabBrush.PrefabBrushUI
         private bool tempTab = false, tempState = false;
 
         //On Off variables
-        [SerializeField]
-        private bool isOn = true;
+        [SerializeField] private bool isOn = true;
         private Texture2D onButtonLight;
         private Texture2D offButtonLight;
         private Texture2D onButtonDark;
@@ -89,6 +87,7 @@ namespace PrefabBrush.PrefabBrushUI
         Rect parentRect;
 
         //Other
+        private static readonly string Title = "预制物 画板";
         private GameObject[] hierarchy;
         private Bounds brushBounds;
         private float paintTravelDistance = 0;
@@ -96,21 +95,20 @@ namespace PrefabBrush.PrefabBrushUI
         private bool moddingSingle = false;
         private GameObject objectToSingleMod = null, objectToChain;
         private const int maxFails = 10;
-   
+
         private LayerMask layerBeforeSingleMod, layerBeforeChaining;
         Event e;
         private GameObject selectedObject, clone;
 
         //Display the window.
-        [MenuItem("Window/Prefab Brush+ ")]
+        [MenuItem("Window/模型/预制物 画板")]
         public static void ShowWindow()
         {
-           var window= GetWindow(typeof(PrefabBrush), false, "Prefab Brush+");
+            var window = GetWindow(typeof(PrefabBrush), false, Title);
         }
 
         void OnFocus()
         {
-
 #if UNITY_2018 || UNITY_2017 || UNITY_5 || UNITY_4
             SceneView.onSceneGUIDelegate -= this.OnSceneGUI;
             SceneView.onSceneGUIDelegate += this.OnSceneGUI;
@@ -126,18 +124,19 @@ namespace PrefabBrush.PrefabBrushUI
             RefreshSaves();
         }
 
-#region SetUp
+        #region SetUp
+
         private void LoadResources()
         {
             //Load textures for use in UI.
             var pathRoot = "Textures/";
-            
+
             onButtonLight = Resources.Load<Texture2D>(pathRoot + "L_Button_On");
             offButtonLight = Resources.Load<Texture2D>(pathRoot + "L_Button_Off");
-            onButtonDark =  Resources.Load<Texture2D>(pathRoot + "D_Button_On");
+            onButtonDark = Resources.Load<Texture2D>(pathRoot + "D_Button_On");
             offButtonDark = Resources.Load<Texture2D>(pathRoot + "D_Button_Off");
 
-            if(isOn)
+            if (isOn)
                 buttonIcon = (EditorGUIUtility.isProSkin) ? onButtonDark : onButtonLight;
             else
                 buttonIcon = (EditorGUIUtility.isProSkin) ? offButtonDark : offButtonLight;
@@ -147,9 +146,11 @@ namespace PrefabBrush.PrefabBrushUI
             //Repaint for good mesure.
             Repaint();
         }
-#endregion
 
-#region GUI
+        #endregion
+
+        #region GUI
+
         void OnGUI()
         {
             CheckActiveSave();
@@ -230,9 +231,8 @@ namespace PrefabBrush.PrefabBrushUI
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label(icon, GUILayout.Width(30), GUILayout.Height(30));
-            GUILayout.Label("Prefab Brush+", styleBold);
+            GUILayout.Label(Title, styleBold);
             EditorGUILayout.EndHorizontal();
-
             // SetTabColour(PB_ActiveTab.About);
             // if (GUILayout.Button("About"))
             //     SetActiveTab(PB_ActiveTab.About);
@@ -334,13 +334,14 @@ namespace PrefabBrush.PrefabBrushUI
 
         private void DrawHotKeys()
         {
-            activeSave.paintBrushHotKey = (KeyCode)EditorGUILayout.EnumPopup("绘制快捷键", activeSave.paintBrushHotKey);
+            activeSave.paintBrushHotKey = (KeyCode) EditorGUILayout.EnumPopup("绘制快捷键", activeSave.paintBrushHotKey);
             activeSave.paintBrushHoldKey = EditorGUILayout.Toggle("快捷键", activeSave.paintBrushHoldKey);
             EditorGUILayout.Space();
-            activeSave.removeBrushHotKey = (KeyCode)EditorGUILayout.EnumPopup("橡皮擦快捷键", activeSave.removeBrushHotKey);
+            activeSave.removeBrushHotKey = (KeyCode) EditorGUILayout.EnumPopup("橡皮擦快捷键", activeSave.removeBrushHotKey);
             activeSave.removeBrushHoldKey = EditorGUILayout.Toggle("快捷键", activeSave.removeBrushHoldKey);
             EditorGUILayout.Space();
-            activeSave.disableBrushHotKey = (KeyCode)EditorGUILayout.EnumPopup("停止绘制捷键", activeSave.disableBrushHotKey);
+            activeSave.disableBrushHotKey =
+                (KeyCode) EditorGUILayout.EnumPopup("停止绘制捷键", activeSave.disableBrushHotKey);
             activeSave.disableBrushHoldKey = EditorGUILayout.Toggle("快捷键", activeSave.disableBrushHoldKey);
         }
 
@@ -391,7 +392,7 @@ namespace PrefabBrush.PrefabBrushUI
                 EditorGUILayout.HelpBox("绘制已停止", MessageType.Warning);
             }
         }
-        
+
 
         private void DrawSavesTab()
         {
@@ -456,7 +457,8 @@ namespace PrefabBrush.PrefabBrushUI
             GUILayout.Label("物理 画笔", style);
             EditorGUILayout.BeginVertical("box");
             activeSave.spawnHeight = EditorGUILayout.FloatField("绘制 高度", activeSave.spawnHeight);
-            activeSave.addRigidbodyToPaintedPrefab = EditorGUILayout.Toggle("在预制物中添加刚体", activeSave.addRigidbodyToPaintedPrefab);
+            activeSave.addRigidbodyToPaintedPrefab =
+                EditorGUILayout.Toggle("在预制物中添加刚体", activeSave.addRigidbodyToPaintedPrefab);
             activeSave.physicsIterations = EditorGUILayout.FloatField("物理学 迭代", activeSave.physicsIterations);
             EditorGUILayout.EndVertical();
         }
@@ -469,7 +471,7 @@ namespace PrefabBrush.PrefabBrushUI
             activeSave.paintType = PB_PaintType.Surface;
 #else
             EditorGUILayout.BeginVertical("box");
-            activeSave.paintType = (PB_PaintType)EditorGUILayout.EnumPopup("预制物 绘制类型", activeSave.paintType);
+            activeSave.paintType = (PB_PaintType) EditorGUILayout.EnumPopup("预制物 绘制类型", activeSave.paintType);
             EditorGUILayout.EndVertical();
 #endif
         }
@@ -480,11 +482,10 @@ namespace PrefabBrush.PrefabBrushUI
             showIgnoreOptions = EditorGUILayout.Foldout(showIgnoreOptions, "忽略选项");
             if (showIgnoreOptions)
             {
-
                 activeSave.ignoreTriggers = EditorGUILayout.Toggle("忽略 触发器 碰撞器", activeSave.ignoreTriggers);
                 activeSave.ignorePaintedPrefabs = EditorGUILayout.Toggle("忽略笔刷中的预制物", activeSave.ignorePaintedPrefabs);
-
             }
+
             EditorGUILayout.EndVertical();
         }
 
@@ -504,10 +505,13 @@ namespace PrefabBrush.PrefabBrushUI
             EditorGUILayout.BeginVertical();
             GUILayout.Label(string.Format("{0} 显示设置", dataTitle));
 
-            prefabDisplayType = (PB_PrefabDisplayType)EditorGUILayout.EnumPopup(string.Format("{0} 显示 类型", dataTitle), prefabDisplayType);
+            prefabDisplayType =
+                (PB_PrefabDisplayType) EditorGUILayout.EnumPopup(string.Format("{0} 显示 类型", dataTitle),
+                    prefabDisplayType);
 
             if (prefabDisplayType == PB_PrefabDisplayType.Icon)
-                prefabIconScaleFactor = EditorGUILayout.Slider(string.Format("{0} 大小", dataTitle), prefabIconScaleFactor, .7f, 4);
+                prefabIconScaleFactor =
+                    EditorGUILayout.Slider(string.Format("{0} 大小", dataTitle), prefabIconScaleFactor, .7f, 4);
 
             EditorGUILayout.EndVertical();
 
@@ -540,7 +544,8 @@ namespace PrefabBrush.PrefabBrushUI
                 EditorGUILayout.EndHorizontal();
             }
 
-            newObjectForPrefabList = EditorGUILayout.ObjectField(newObjectForPrefabList, typeof(GameObject), false) as GameObject;
+            newObjectForPrefabList =
+                EditorGUILayout.ObjectField(newObjectForPrefabList, typeof(GameObject), false) as GameObject;
 
             if (newObjectForPrefabList != null)
             {
@@ -556,7 +561,8 @@ namespace PrefabBrush.PrefabBrushUI
             GUI.color = Color.blue;
             activeSave.prefabData[i].selected = GUILayout.Toggle(activeSave.prefabData[i].selected, "");
             GUI.color = Color.white;
-            activeSave.prefabData[i].prefab = EditorGUILayout.ObjectField(activeSave.prefabData[i].prefab, typeof(GameObject), false) as GameObject;
+            activeSave.prefabData[i].prefab =
+                EditorGUILayout.ObjectField(activeSave.prefabData[i].prefab, typeof(GameObject), false) as GameObject;
             GUI.color = Color.red;
             if (GUILayout.Button("X"))
                 activeSave.prefabData.RemoveAt(i);
@@ -571,11 +577,13 @@ namespace PrefabBrush.PrefabBrushUI
             float height = (rowCount >= 1) ? 2.3f : 1.3f;
 
             EditorGUILayout.BeginVertical(); //Begin the window with all the prefabs in it
-            prefabViewScrollPos = EditorGUILayout.BeginScrollView(prefabViewScrollPos, GUILayout.Height(GetPrefabIconSize() * height)); //Start the scroll view 
+            prefabViewScrollPos =
+                EditorGUILayout.BeginScrollView(prefabViewScrollPos,
+                    GUILayout.Height(GetPrefabIconSize() * height)); //Start the scroll view 
             int id = 0; //This counts how many prefab icons have been built
             for (int y = 0; y <= rowCount; y++)
             {
-                EditorGUILayout.BeginHorizontal();//Start a new row
+                EditorGUILayout.BeginHorizontal(); //Start a new row
                 for (int x = 0; x < coloumnCount; x++)
                 {
                     if (id >= activeSave.prefabData.Count) //If there are no more prefabs to add icons for then break
@@ -588,16 +596,18 @@ namespace PrefabBrush.PrefabBrushUI
 
                     id++;
                 }
-                GUILayout.FlexibleSpace();//Push all of the prefab icons to the left
-                EditorGUILayout.EndHorizontal();//End the row
+
+                GUILayout.FlexibleSpace(); //Push all of the prefab icons to the left
+                EditorGUILayout.EndHorizontal(); //End the row
             }
+
             EditorGUILayout.EndScrollView();
             EditorGUILayout.EndVertical();
         }
 
         private void DrawDragWindow()
         {
-            GUI.color = Color.green;
+            GUI.color = new Color(0,128f/255f,0,128f/255f);
             dropRect = EditorGUILayout.BeginVertical("box", GUILayout.Height(GetPrefabIconSize() * 1.5f));
             GUI.color = Color.white;
             GUILayout.FlexibleSpace();
@@ -629,7 +639,8 @@ namespace PrefabBrush.PrefabBrushUI
                 if (!activeSave.prefabData[id].selected)
                     GUI.color = disabledColor;
 
-                GUILayout.Box(AssetPreview.GetAssetPreview(prefab) as Texture2D, GUILayout.Width(GetPrefabIconSize()), GUILayout.Height(GetPrefabIconSize()));
+                GUILayout.Box(AssetPreview.GetAssetPreview(prefab) as Texture2D, GUILayout.Width(GetPrefabIconSize()),
+                    GUILayout.Height(GetPrefabIconSize()));
 
                 GUI.color = Color.white;
 
@@ -649,7 +660,8 @@ namespace PrefabBrush.PrefabBrushUI
 
                 GUI.color = Color.blue;
 
-                prefabIconRect.x = prefabIconRect.x + (prefabIconRect.width - deleteButtonSize - toggleButtonSize - spacing);
+                prefabIconRect.x = prefabIconRect.x +
+                                   (prefabIconRect.width - deleteButtonSize - toggleButtonSize - spacing);
                 prefabIconRect.height = toggleButtonSize;
                 prefabIconRect.width = toggleButtonSize;
 
@@ -669,7 +681,8 @@ namespace PrefabBrush.PrefabBrushUI
             GUILayout.Label("笔刷 尺寸", style);
             EditorGUILayout.BeginVertical("box");
             EditorGUILayout.BeginHorizontal();
-            activeSave.brushSize = EditorGUILayout.Slider(activeSave.brushSize, activeSave.minBrushSize, activeSave.maxBrushSize);
+            activeSave.brushSize =
+                EditorGUILayout.Slider(activeSave.brushSize, activeSave.minBrushSize, activeSave.maxBrushSize);
             EditorGUILayout.EndHorizontal();
             showMaxBrushSizeSlider = EditorGUILayout.Foldout(showMaxBrushSizeSlider, "最大滑块尺寸");
             if (showMaxBrushSizeSlider)
@@ -684,7 +697,8 @@ namespace PrefabBrush.PrefabBrushUI
             //Define the distance the brush needs to move before it paints again
             GUILayout.Label("绘制三角距离", style);
             EditorGUILayout.BeginVertical("box");
-            activeSave.paintDeltaDistance = EditorGUILayout.Slider(activeSave.paintDeltaDistance, activeSave.minPaintDeltaDistance, activeSave.maxPaintDeltaDistance);
+            activeSave.paintDeltaDistance = EditorGUILayout.Slider(activeSave.paintDeltaDistance,
+                activeSave.minPaintDeltaDistance, activeSave.maxPaintDeltaDistance);
             //For Debugging
             //GUILayout.Label(string.Format("Current Distance = {0}", paintTravelDistance.ToString()));
 
@@ -692,15 +706,19 @@ namespace PrefabBrush.PrefabBrushUI
 
             if (showMaxMinPaintDelta)
             {
-                activeSave.maxPaintDeltaDistance = EditorGUILayout.FloatField("最大 绘制 三角 距离", activeSave.maxPaintDeltaDistance);
-                activeSave.minPaintDeltaDistance = EditorGUILayout.FloatField("最小 绘制 三角 距离", activeSave.minPaintDeltaDistance);
+                activeSave.maxPaintDeltaDistance =
+                    EditorGUILayout.FloatField("最大 绘制 三角 距离", activeSave.maxPaintDeltaDistance);
+                activeSave.minPaintDeltaDistance =
+                    EditorGUILayout.FloatField("最小 绘制 三角 距离", activeSave.minPaintDeltaDistance);
             }
+
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.Space();
             GUILayout.Label("每一次绘制 预制物数量", style);
             EditorGUILayout.BeginVertical("box");
-            activeSave.prefabsPerStroke = EditorGUILayout.IntSlider(activeSave.prefabsPerStroke, activeSave.minprefabsPerStroke, activeSave.maxprefabsPerStroke);
+            activeSave.prefabsPerStroke = EditorGUILayout.IntSlider(activeSave.prefabsPerStroke,
+                activeSave.minprefabsPerStroke, activeSave.maxprefabsPerStroke);
 
             showMaxMinPrefabsPerStroke = EditorGUILayout.Foldout(showMaxMinPrefabsPerStroke, "显示 最多/最少 每一次绘制数量");
 
@@ -718,7 +736,8 @@ namespace PrefabBrush.PrefabBrushUI
             if (Tools.current != Tool.Move && Tools.current != Tool.Rotate && Tools.current != Tool.Scale)
             {
                 EditorGUILayout.BeginVertical("box");
-                activeSave.draggingAction = (PB_DragModType)EditorGUILayout.EnumPopup("拖动修改类型", activeSave.draggingAction);
+                activeSave.draggingAction =
+                    (PB_DragModType) EditorGUILayout.EnumPopup("拖动修改类型", activeSave.draggingAction);
                 EditorGUILayout.EndVertical();
             }
             else
@@ -731,7 +750,7 @@ namespace PrefabBrush.PrefabBrushUI
 
             EditorGUILayout.BeginVertical("box");
             GUILayout.Label("旋转设置");
-            activeSave.rotationAxis = (PB_Direction)EditorGUILayout.EnumPopup("旋转轴", activeSave.rotationAxis);
+            activeSave.rotationAxis = (PB_Direction) EditorGUILayout.EnumPopup("旋转轴", activeSave.rotationAxis);
             activeSave.rotationSensitivity = EditorGUILayout.FloatField("旋转灵敏度", activeSave.rotationSensitivity);
             EditorGUILayout.EndVertical();
         }
@@ -741,9 +760,9 @@ namespace PrefabBrush.PrefabBrushUI
             GUILayout.Label("链条选项");
             EditorGUILayout.BeginVertical("box");
             GUILayout.Label("链条绘制方向");
-            activeSave.chainDirection = (PB_Direction)EditorGUILayout.EnumPopup(activeSave.chainDirection);
+            activeSave.chainDirection = (PB_Direction) EditorGUILayout.EnumPopup(activeSave.chainDirection);
             GUILayout.Label("链条枢纽轴");
-            activeSave.chainPivotAxis = (PB_Direction)EditorGUILayout.EnumPopup(activeSave.chainPivotAxis);
+            activeSave.chainPivotAxis = (PB_Direction) EditorGUILayout.EnumPopup(activeSave.chainPivotAxis);
             EditorGUILayout.EndVertical();
         }
 
@@ -762,8 +781,10 @@ namespace PrefabBrush.PrefabBrushUI
             if (activeSave.checkLayer)
             {
                 EditorGUILayout.Space();
-                activeSave.requiredLayerMask = EditorGUILayout.MaskField(activeSave.requiredLayerMask, UnityEditorInternal.InternalEditorUtility.layers);
+                activeSave.requiredLayerMask = EditorGUILayout.MaskField(activeSave.requiredLayerMask,
+                    UnityEditorInternal.InternalEditorUtility.layers);
             }
+
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
@@ -783,8 +804,10 @@ namespace PrefabBrush.PrefabBrushUI
             if (activeSave.checkTag)
             {
                 EditorGUILayout.Space();
-                activeSave.requiredTagMask = EditorGUILayout.MaskField(activeSave.requiredTagMask, UnityEditorInternal.InternalEditorUtility.tags);
+                activeSave.requiredTagMask = EditorGUILayout.MaskField(activeSave.requiredTagMask,
+                    UnityEditorInternal.InternalEditorUtility.tags);
             }
+
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
@@ -805,11 +828,14 @@ namespace PrefabBrush.PrefabBrushUI
                 EditorGUILayout.Space();
 
                 EditorGUILayout.BeginHorizontal("box");
-                GUILayout.Label(string.Format("最小 角度 = {0} | 最大 角度 = {1}", Mathf.Round(activeSave.minRequiredSlope * 100f) / 100f, Mathf.Round(activeSave.maxRequiredSlope * 100f) / 100f), style);
+                GUILayout.Label(
+                    string.Format("最小 角度 = {0} | 最大 角度 = {1}", Mathf.Round(activeSave.minRequiredSlope * 100f) / 100f,
+                        Mathf.Round(activeSave.maxRequiredSlope * 100f) / 100f), style);
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.MinMaxSlider(ref activeSave.minRequiredSlope, ref activeSave.maxRequiredSlope, 0, 90);
             }
+
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
@@ -838,7 +864,7 @@ namespace PrefabBrush.PrefabBrushUI
         {
             GUILayout.Label("刷过的物体 父级设置", style);
             EditorGUILayout.BeginVertical("box");
-            activeSave.parentingStyle = (PB_ParentingStyle)EditorGUILayout.EnumPopup(activeSave.parentingStyle);
+            activeSave.parentingStyle = (PB_ParentingStyle) EditorGUILayout.EnumPopup(activeSave.parentingStyle);
 
             switch (activeSave.parentingStyle)
             {
@@ -846,7 +872,8 @@ namespace PrefabBrush.PrefabBrushUI
                     EditorGUILayout.HelpBox("预制物上色后，现在会把它们自己变成它们被上色的表面.", MessageType.Info);
                     break;
                 case PB_ParentingStyle.SingleParent:
-                    activeSave.parent = EditorGUILayout.ObjectField(activeSave.parent, typeof(GameObject), true) as GameObject;
+                    activeSave.parent =
+                        EditorGUILayout.ObjectField(activeSave.parent, typeof(GameObject), true) as GameObject;
                     break;
                 case PB_ParentingStyle.ClosestFromList:
                     DrawParentList();
@@ -855,6 +882,7 @@ namespace PrefabBrush.PrefabBrushUI
                     DrawParentList();
                     break;
             }
+
             EditorGUILayout.EndVertical();
         }
 
@@ -865,7 +893,8 @@ namespace PrefabBrush.PrefabBrushUI
             activeSave.rotateToMatchSurface = EditorGUILayout.Toggle(activeSave.rotateToMatchSurface);
             if (activeSave.rotateToMatchSurface)
             {
-                activeSave.rotateSurfaceDirection = (PB_Direction)EditorGUILayout.EnumPopup(activeSave.rotateSurfaceDirection);
+                activeSave.rotateSurfaceDirection =
+                    (PB_Direction) EditorGUILayout.EnumPopup(activeSave.rotateSurfaceDirection);
                 EditorGUILayout.HelpBox("如果你的GameObjects没有朝向正确的方向，尝试改变上面列出的方向.", MessageType.Info);
             }
 
@@ -921,6 +950,7 @@ namespace PrefabBrush.PrefabBrushUI
                 rotationSet = EditorGUILayout.FloatField(rotationSet);
                 EditorGUILayout.EndHorizontal();
             }
+
             EditorGUILayout.EndVertical();
         }
 
@@ -928,10 +958,12 @@ namespace PrefabBrush.PrefabBrushUI
         {
             GUILayout.Label("自定缩放", style);
             EditorGUILayout.BeginVertical("box");
-            activeSave.scaleType = (PB_ScaleType)EditorGUILayout.EnumPopup(activeSave.scaleType);
+            activeSave.scaleType = (PB_ScaleType) EditorGUILayout.EnumPopup(activeSave.scaleType);
 
             if (activeSave.scaleType != PB_ScaleType.None)
-                activeSave.scaleApplicationType = (PB_SaveApplicationType)EditorGUILayout.EnumPopup("Scale Application", activeSave.scaleApplicationType);
+                activeSave.scaleApplicationType =
+                    (PB_SaveApplicationType) EditorGUILayout.EnumPopup("Scale Application",
+                        activeSave.scaleApplicationType);
 
             switch (activeSave.scaleType)
             {
@@ -1056,7 +1088,8 @@ namespace PrefabBrush.PrefabBrushUI
 
         private void DrawParentListItem(int i)
         {
-            activeSave.parentList[i] = EditorGUILayout.ObjectField(activeSave.parentList[i], typeof(GameObject), true) as GameObject;
+            activeSave.parentList[i] =
+                EditorGUILayout.ObjectField(activeSave.parentList[i], typeof(GameObject), true) as GameObject;
 
             GUI.color = Color.red;
 
@@ -1074,7 +1107,8 @@ namespace PrefabBrush.PrefabBrushUI
             GUILayout.Label("橡皮擦大小", style);
             EditorGUILayout.BeginVertical("box");
             EditorGUILayout.BeginHorizontal();
-            activeSave.eraseBrushSize = EditorGUILayout.Slider(activeSave.eraseBrushSize, activeSave.minEraseBrushSize, activeSave.maxEraseBrushSize);
+            activeSave.eraseBrushSize = EditorGUILayout.Slider(activeSave.eraseBrushSize, activeSave.minEraseBrushSize,
+                activeSave.maxEraseBrushSize);
             EditorGUILayout.EndHorizontal();
             GUILayout.Label("最大 滑块 尺寸");
             activeSave.maxEraseBrushSize = EditorGUILayout.FloatField(activeSave.maxEraseBrushSize);
@@ -1084,7 +1118,7 @@ namespace PrefabBrush.PrefabBrushUI
         private void DrawEraseDetectionType()
         {
             GUILayout.Label("橡皮擦检测类型");
-            activeSave.eraseDetection = (PB_EraseDetectionType)EditorGUILayout.EnumPopup(activeSave.eraseDetection);
+            activeSave.eraseDetection = (PB_EraseDetectionType) EditorGUILayout.EnumPopup(activeSave.eraseDetection);
 
             switch (activeSave.eraseDetection)
             {
@@ -1102,7 +1136,7 @@ namespace PrefabBrush.PrefabBrushUI
         private void DrawEraseType()
         {
             GUILayout.Label("橡皮擦类型", style);
-            activeSave.eraseType = (PB_EraseTypes)EditorGUILayout.EnumPopup(activeSave.eraseType);
+            activeSave.eraseType = (PB_EraseTypes) EditorGUILayout.EnumPopup(activeSave.eraseType);
 
             switch (activeSave.eraseType)
             {
@@ -1138,8 +1172,10 @@ namespace PrefabBrush.PrefabBrushUI
             if (activeSave.checkTagForErase)
             {
                 EditorGUILayout.Space();
-                activeSave.requiredTagMaskForErase = EditorGUILayout.MaskField(activeSave.requiredTagMaskForErase, UnityEditorInternal.InternalEditorUtility.tags);
+                activeSave.requiredTagMaskForErase = EditorGUILayout.MaskField(activeSave.requiredTagMaskForErase,
+                    UnityEditorInternal.InternalEditorUtility.tags);
             }
+
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
@@ -1159,12 +1195,15 @@ namespace PrefabBrush.PrefabBrushUI
             if (activeSave.checkLayerForErase)
             {
                 EditorGUILayout.Space();
-                activeSave.requiredLayerMaskForErase = EditorGUILayout.MaskField(activeSave.requiredLayerMaskForErase, UnityEditorInternal.InternalEditorUtility.layers);
+                activeSave.requiredLayerMaskForErase = EditorGUILayout.MaskField(activeSave.requiredLayerMaskForErase,
+                    UnityEditorInternal.InternalEditorUtility.layers);
             }
+
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
         }
+
         private void DrawSlopAngleToErase()
         {
             EditorGUILayout.Space();
@@ -1180,11 +1219,16 @@ namespace PrefabBrush.PrefabBrushUI
                 EditorGUILayout.Space();
 
                 EditorGUILayout.BeginHorizontal("box");
-                GUILayout.Label(string.Format("最小 角度 = {0} | 最大 角度 = {1}", Mathf.Round(activeSave.minRequiredSlopeForErase * 100f) / 100f, Mathf.Round(activeSave.maxRequiredSlopeForErase * 100f) / 100f), style);
+                GUILayout.Label(
+                    string.Format("最小 角度 = {0} | 最大 角度 = {1}",
+                        Mathf.Round(activeSave.minRequiredSlopeForErase * 100f) / 100f,
+                        Mathf.Round(activeSave.maxRequiredSlopeForErase * 100f) / 100f), style);
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.MinMaxSlider(ref activeSave.minRequiredSlopeForErase, ref activeSave.maxRequiredSlopeForErase, 0, 90);
+                EditorGUILayout.MinMaxSlider(ref activeSave.minRequiredSlopeForErase,
+                    ref activeSave.maxRequiredSlopeForErase, 0, 90);
             }
+
             EditorGUILayout.EndVertical();
 
             EditorGUILayout.EndHorizontal();
@@ -1260,6 +1304,7 @@ namespace PrefabBrush.PrefabBrushUI
                 DrawSaveItem(i);
                 EditorGUILayout.Space();
             }
+
             EditorGUILayout.EndVertical();
         }
 
@@ -1331,7 +1376,8 @@ namespace PrefabBrush.PrefabBrushUI
 
         private void DrawSaveAsComfirmationWindow()
         {
-            EditorGUILayout.HelpBox(string.Format("你确定你要覆盖 {0}. 保存在该文件中的所有数据将被丢失，并被新的数据所取代", comfirmationName), MessageType.Info);
+            EditorGUILayout.HelpBox(string.Format("你确定你要覆盖 {0}. 保存在该文件中的所有数据将被丢失，并被新的数据所取代", comfirmationName),
+                MessageType.Info);
 
             EditorGUILayout.BeginHorizontal();
 
@@ -1427,19 +1473,23 @@ namespace PrefabBrush.PrefabBrushUI
                         break;
                     case PB_PaintType.Physics:
                         Handles.color = circleColour;
-                        Handles.DrawSolidDisc(drawPointHit.point + (Vector3.up * activeSave.spawnHeight), Vector3.up, radius * .5f);
+                        Handles.DrawSolidDisc(drawPointHit.point + (Vector3.up * activeSave.spawnHeight), Vector3.up,
+                            radius * .5f);
                         Handles.color = Color.grey;
                         Handles.DrawWireDisc(drawPointHit.point, Vector3.up, radius * .5f);
-                        Handles.DrawLine(drawPointHit.point + (Vector3.up * activeSave.spawnHeight), drawPointHit.point);
+                        Handles.DrawLine(drawPointHit.point + (Vector3.up * activeSave.spawnHeight),
+                            drawPointHit.point);
                         break;
                 }
 
                 SceneView.RepaintAll();
             }
         }
+
         #endregion
 
-#region Methods
+        #region Methods
+
         private void AddPrefab(Object[] objectsToAdd)
         {
             for (int i = 0; i < objectsToAdd.Length; i++)
@@ -1494,7 +1544,10 @@ namespace PrefabBrush.PrefabBrushUI
 
             //Calculate the radius of the brush size.
             float newBrushSize = activeSave.brushSize * .5f;
-            bool didRayHit = GetHitPoint(new Vector3(ray.origin.x + Random.insideUnitSphere.x * newBrushSize, ray.origin.y, ray.origin.z + Random.insideUnitSphere.z * newBrushSize), ray.direction, out finalHit);
+            bool didRayHit =
+                GetHitPoint(
+                    new Vector3(ray.origin.x + Random.insideUnitSphere.x * newBrushSize, ray.origin.y,
+                        ray.origin.z + Random.insideUnitSphere.z * newBrushSize), ray.direction, out finalHit);
             int failCount = 0;
 
             if (didRayHit == false)
@@ -1511,7 +1564,10 @@ namespace PrefabBrush.PrefabBrushUI
                             {
                                 while (!didRayHit && failCount <= maxFails)
                                 {
-                                    didRayHit = GetHitPoint(new Vector3(ray.origin.x + Random.insideUnitSphere.x * newBrushSize, ray.origin.y, ray.origin.z + Random.insideUnitSphere.z * newBrushSize), ray.direction, out finalHit);
+                                    didRayHit = GetHitPoint(
+                                        new Vector3(ray.origin.x + Random.insideUnitSphere.x * newBrushSize,
+                                            ray.origin.y, ray.origin.z + Random.insideUnitSphere.z * newBrushSize),
+                                        ray.direction, out finalHit);
 
                                     //After max fails we want to exit the while loop
                                     if (!didRayHit)
@@ -1523,6 +1579,7 @@ namespace PrefabBrush.PrefabBrushUI
 
                             RunSurfacePaint(mouseDown, finalHit, false);
                         }
+
                     break;
                 case PB_PaintType.Physics:
                     if (mouseDrag || mouseDown)
@@ -1533,7 +1590,10 @@ namespace PrefabBrush.PrefabBrushUI
                             {
                                 while (!didRayHit && failCount <= maxFails)
                                 {
-                                    didRayHit = GetHitPoint(new Vector3(ray.origin.x + Random.insideUnitSphere.x * newBrushSize, ray.origin.y, ray.origin.z + Random.insideUnitSphere.z * newBrushSize), ray.direction, out finalHit);
+                                    didRayHit = GetHitPoint(
+                                        new Vector3(ray.origin.x + Random.insideUnitSphere.x * newBrushSize,
+                                            ray.origin.y, ray.origin.z + Random.insideUnitSphere.z * newBrushSize),
+                                        ray.direction, out finalHit);
 
                                     //After max fails we want to exit the while loop
                                     if (!didRayHit)
@@ -1545,6 +1605,7 @@ namespace PrefabBrush.PrefabBrushUI
 
                             RunSurfacePaint(mouseDown, finalHit, true);
                         }
+
                     break;
                 case PB_PaintType.Single:
                     RunSinglePaint(mouseDown, mouseDrag, mouseUp, mouseLeaveWindow, finalHit);
@@ -1564,7 +1625,8 @@ namespace PrefabBrush.PrefabBrushUI
 
                 if (selectedObject != null)
                 {
-                    if (CanBrush(hit, activeSave.checkTag, activeSave.checkLayer, activeSave.checkSlope)) //If the brush result come back as true then start brushing
+                    if (CanBrush(hit, activeSave.checkTag, activeSave.checkLayer,
+                        activeSave.checkSlope)) //If the brush result come back as true then start brushing
                     {
                         clone = PrefabUtility.InstantiatePrefab(selectedObject) as GameObject;
 
@@ -1573,11 +1635,15 @@ namespace PrefabBrush.PrefabBrushUI
 
                         //Apply prefabs mods
                         if (!physicsBrush)
-                            ApplyModifications(clone, hit, false, activeSave.parentingStyle, activeSave.rotateToMatchSurface, activeSave.randomizeRotation, (activeSave.scaleType != PB_ScaleType.None), false);                                    
+                            ApplyModifications(clone, hit, false, activeSave.parentingStyle,
+                                activeSave.rotateToMatchSurface, activeSave.randomizeRotation,
+                                (activeSave.scaleType != PB_ScaleType.None), false);
                         else
-                            ApplyModifications(clone, hit, true, activeSave.parentingStyle, activeSave.rotateToMatchSurface, activeSave.randomizeRotation, (activeSave.scaleType != PB_ScaleType.None), true);
+                            ApplyModifications(clone, hit, true, activeSave.parentingStyle,
+                                activeSave.rotateToMatchSurface, activeSave.randomizeRotation,
+                                (activeSave.scaleType != PB_ScaleType.None), true);
 
-                        Undo.RegisterCreatedObjectUndo(clone, "笔触: " + clone.name);       //Store the undo variables.
+                        Undo.RegisterCreatedObjectUndo(clone, "笔触: " + clone.name); //Store the undo variables.
                     }
                 }
                 else
@@ -1597,8 +1663,10 @@ namespace PrefabBrush.PrefabBrushUI
 
                     if (clone != null)
                     {
-                        ApplyModifications(clone, hit, false, activeSave.parentingStyle, activeSave.rotateToMatchSurface, activeSave.randomizeRotation, (activeSave.scaleType != PB_ScaleType.None), false);
-                        Undo.RegisterCreatedObjectUndo(clone, "笔触: " + clone.name);       //Store the undo variables.
+                        ApplyModifications(clone, hit, false, activeSave.parentingStyle,
+                            activeSave.rotateToMatchSurface, activeSave.randomizeRotation,
+                            (activeSave.scaleType != PB_ScaleType.None), false);
+                        Undo.RegisterCreatedObjectUndo(clone, "笔触: " + clone.name); //Store the undo variables.
 
                         objectToSingleMod = clone;
                         layerBeforeSingleMod = clone.layer;
@@ -1625,14 +1693,17 @@ namespace PrefabBrush.PrefabBrushUI
                     case PB_DragModType.Rotation:
 
                         if (e.isMouse)
-                            objectToSingleMod.transform.Rotate(objectToSingleMod.transform.TransformDirection(GetDirection(activeSave.rotationAxis)), activeSave.rotationSensitivity * (-e.delta.x * Time.deltaTime));
+                            objectToSingleMod.transform.Rotate(
+                                objectToSingleMod.transform.TransformDirection(GetDirection(activeSave.rotationAxis)),
+                                activeSave.rotationSensitivity * (-e.delta.x * Time.deltaTime));
 
                         break;
                     case PB_DragModType.Scale:
 
                         if (e.isMouse)
                         {
-                            Vector3 newScale = objectToSingleMod.transform.localScale + Vector3.one * (-e.delta.x * Time.deltaTime);
+                            Vector3 newScale = objectToSingleMod.transform.localScale +
+                                               Vector3.one * (-e.delta.x * Time.deltaTime);
 
                             if (newScale.x > 0 && newScale.y > 0 && newScale.z > 0)
                                 objectToSingleMod.transform.localScale = newScale;
@@ -1682,14 +1753,14 @@ namespace PrefabBrush.PrefabBrushUI
 
                 //If we get this far then it is a valid surface, we just need to check the distance;
                 float curDist = Vector3.Distance(origin, hits[i].point);
-                if(curDist < minDist)
+                if (curDist < minDist)
                 {
                     idToReturn = i;
                     minDist = curDist;
                 }
             }
 
-            if(hits.Count == 0 || idToReturn == -1)
+            if (hits.Count == 0 || idToReturn == -1)
             {
                 hit = new RaycastHit();
                 return false;
@@ -1702,7 +1773,9 @@ namespace PrefabBrush.PrefabBrushUI
         private void RunEraseBrush()
         {
             //If the placment brush is selected and the mouse is being dragged across the scene view.
-            bool isMouseEventCorrect = ((Event.current.type == EventType.MouseDrag || Event.current.type == EventType.MouseDown) && Event.current.button == 0);
+            bool isMouseEventCorrect =
+                ((Event.current.type == EventType.MouseDrag || Event.current.type == EventType.MouseDown) &&
+                 Event.current.button == 0);
             if (isMouseEventCorrect && IsTabActive(PB_ActiveTab.PrefabErase))
             {
                 //Calculate the radius of the brush size.
@@ -1725,23 +1798,28 @@ namespace PrefabBrush.PrefabBrushUI
                             {
                                 if (cols[i] != null)
                                 {
-                                    if (CanErase(hit, cols[i].gameObject, activeSave.checkTagForErase, activeSave.checkLayerForErase, activeSave.checkSlopeForErase))
+                                    if (CanErase(hit, cols[i].gameObject, activeSave.checkTagForErase,
+                                        activeSave.checkLayerForErase, activeSave.checkSlopeForErase))
                                         TryErase(cols[i].gameObject);
                                 }
                             }
+
                             break;
                         case PB_EraseDetectionType.Distance:
                             for (int i = 0; i < hierarchy.Length; i++)
                             {
                                 if (hierarchy[i] != null)
                                 {
-                                    bool checkErase = (CanErase(hit, hierarchy[i], activeSave.checkTagForErase, activeSave.checkLayerForErase, activeSave.checkSlopeForErase));
-                                    bool checkDistance = (CheckDistance(newBrushSize, hit.point, hierarchy[i].transform.position));
+                                    bool checkErase = (CanErase(hit, hierarchy[i], activeSave.checkTagForErase,
+                                        activeSave.checkLayerForErase, activeSave.checkSlopeForErase));
+                                    bool checkDistance = (CheckDistance(newBrushSize, hit.point,
+                                        hierarchy[i].transform.position));
 
                                     if (checkErase && checkDistance)
                                         TryErase(hierarchy[i]);
                                 }
                             }
+
                             break;
                     }
                 }
@@ -1773,6 +1851,7 @@ namespace PrefabBrush.PrefabBrushUI
                         GameObject go = g;
                         Undo.DestroyObjectImmediate(go);
                     }
+
                     break;
             }
         }
@@ -1825,7 +1904,8 @@ namespace PrefabBrush.PrefabBrushUI
             return true;
         }
 
-        private bool CanErase(RaycastHit surfaceHit, GameObject objectToErase, bool checkTag, bool checkLayer, bool checkSlope)
+        private bool CanErase(RaycastHit surfaceHit, GameObject objectToErase, bool checkTag, bool checkLayer,
+            bool checkSlope)
         {
             if (checkTag)
             {
@@ -1873,7 +1953,9 @@ namespace PrefabBrush.PrefabBrushUI
             return true;
         }
 
-        private void ApplyModifications(GameObject objectToMod, RaycastHit hitRef, bool useHeightOffset, PB_ParentingStyle parentingStyle, bool rotateToMatchSurface, bool randomizeRotation, bool randomizeScale, bool simPhysics)
+        private void ApplyModifications(GameObject objectToMod, RaycastHit hitRef, bool useHeightOffset,
+            PB_ParentingStyle parentingStyle, bool rotateToMatchSurface, bool randomizeRotation, bool randomizeScale,
+            bool simPhysics)
         {
             float x = hitRef.point.x + activeSave.prefabOriginOffset.x;
             float y = hitRef.point.y + activeSave.prefabOriginOffset.y;
@@ -1903,7 +1985,8 @@ namespace PrefabBrush.PrefabBrushUI
                     Transform newParent = null;
                     for (int i = 0; i < activeSave.parentList.Count; i++)
                     {
-                        float curDist = Vector3.Distance(activeSave.parentList[i].transform.position, objectToMod.transform.position);
+                        float curDist = Vector3.Distance(activeSave.parentList[i].transform.position,
+                            objectToMod.transform.position);
                         if (curDist < dist)
                         {
                             newParent = activeSave.parentList[i].transform;
@@ -1922,11 +2005,17 @@ namespace PrefabBrush.PrefabBrushUI
                     break;
             }
 
-            if (rotateToMatchSurface)    //If rotate to surface has been selected then set the spawn objects rotation to the bases normal.
-                objectToMod.transform.rotation = Quaternion.FromToRotation(GetDirection(activeSave.rotateSurfaceDirection), hitRef.normal);
+            if (
+                rotateToMatchSurface) //If rotate to surface has been selected then set the spawn objects rotation to the bases normal.
+                objectToMod.transform.rotation =
+                    Quaternion.FromToRotation(GetDirection(activeSave.rotateSurfaceDirection), hitRef.normal);
 
-            if (randomizeRotation)     //If random rotation has been selected then apply a random rotation define by the values in the window.
-                objectToMod.transform.rotation *= Quaternion.Euler(new Vector3(Random.Range(activeSave.minXRotation, activeSave.maxXRotation), Random.Range(activeSave.minYRotation, activeSave.maxYRotation), Random.Range(activeSave.minZRotation, activeSave.maxZRotation)));
+            if (
+                randomizeRotation) //If random rotation has been selected then apply a random rotation define by the values in the window.
+                objectToMod.transform.rotation *= Quaternion.Euler(new Vector3(
+                    Random.Range(activeSave.minXRotation, activeSave.maxXRotation),
+                    Random.Range(activeSave.minYRotation, activeSave.maxYRotation),
+                    Random.Range(activeSave.minZRotation, activeSave.maxZRotation)));
 
             //If random scale has been selected then apply a new scale transform to each object based on a random range.
             if (randomizeScale)
@@ -1936,7 +2025,8 @@ namespace PrefabBrush.PrefabBrushUI
                 switch (activeSave.scaleType)
                 {
                     case PB_ScaleType.SingleValue:
-                        newScale *= Random.Range(activeSave.minScale, activeSave.maxScale); //Create a random number between the min and max scale values. 
+                        newScale *= Random.Range(activeSave.minScale,
+                            activeSave.maxScale); //Create a random number between the min and max scale values. 
                         break;
                     case PB_ScaleType.MultiAxis:
                         newScale.x = Random.Range(activeSave.minXScale, activeSave.maxXScale);
@@ -1981,6 +2071,7 @@ namespace PrefabBrush.PrefabBrushUI
                 {
                     Physics.Simulate(Time.fixedDeltaTime);
                 }
+
                 Physics.autoSimulation = true;
 
                 if (removeBodyAtEnd)
@@ -2024,7 +2115,7 @@ namespace PrefabBrush.PrefabBrushUI
                 if (e.type == EventType.KeyDown)
                 {
                     if (tempTab)
-                    return;
+                        return;
 
                     previousTab = activeTab;
                     tempTab = true;
@@ -2097,9 +2188,10 @@ namespace PrefabBrush.PrefabBrushUI
             isOn = !isOn;
             buttonIcon = GetButtonTexture();
         }
-#endregion
 
-#region Tools
+        #endregion
+
+        #region Tools
 
         private bool GetHoldKeyState(KeyCode code)
         {
@@ -2125,7 +2217,7 @@ namespace PrefabBrush.PrefabBrushUI
             activeTab = newTab;
 
             if (newTab == PB_ActiveTab.PrefabErase)
-                hierarchy = (GameObject[])FindObjectsOfType(typeof(GameObject));
+                hierarchy = (GameObject[]) FindObjectsOfType(typeof(GameObject));
         }
 
         private void SetTabColour(PB_ActiveTab tabToCheck)
@@ -2206,6 +2298,7 @@ namespace PrefabBrush.PrefabBrushUI
                     }
                 }
             }
+
             return output.ToArray();
         }
 
@@ -2225,6 +2318,7 @@ namespace PrefabBrush.PrefabBrushUI
                     }
                 }
             }
+
             return output.ToArray();
         }
 
@@ -2244,6 +2338,7 @@ namespace PrefabBrush.PrefabBrushUI
                         bounds.Encapsulate(GetBoundsFromRenderer(child.gameObject));
                 }
             }
+
             return bounds;
         }
 
@@ -2273,9 +2368,11 @@ namespace PrefabBrush.PrefabBrushUI
             else
                 return (EditorGUIUtility.isProSkin) ? offButtonDark : offButtonLight;
         }
-#endregion
 
-#region SaveAndLoad
+        #endregion
+
+        #region SaveAndLoad
+
         private void CreateEmptySave()
         {
             MountSave();
@@ -2322,13 +2419,15 @@ namespace PrefabBrush.PrefabBrushUI
 
         private void MountSave(PB_SaveObject objectToLoad = null)
         {
-            PB_SaveObject asset = (objectToLoad == null) ? ScriptableObject.CreateInstance<PB_SaveObject>() : Instantiate(objectToLoad);
+            PB_SaveObject asset = (objectToLoad == null)
+                ? ScriptableObject.CreateInstance<PB_SaveObject>()
+                : Instantiate(objectToLoad);
             string assetName = string.Format("{0}/activeSave.asset", GetActiveSavePath());
 
             AssetDatabase.CreateAsset(asset, assetName);
             AssetDatabase.SaveAssets();
 
-            activeSave = (PB_SaveObject)AssetDatabase.LoadAssetAtPath(assetName, typeof(PB_SaveObject));
+            activeSave = (PB_SaveObject) AssetDatabase.LoadAssetAtPath(assetName, typeof(PB_SaveObject));
             loadedSave = objectToLoad;
         }
 
@@ -2376,7 +2475,8 @@ namespace PrefabBrush.PrefabBrushUI
         {
             List<PB_SaveObject> allSaves = new List<PB_SaveObject>();
             string path = savePath;
-            string[] fileEntries = System.IO.Directory.GetFiles(Application.dataPath.Replace("/Assets", "") + "/" + path);
+            string[] fileEntries =
+                System.IO.Directory.GetFiles(Application.dataPath.Replace("/Assets", "") + "/" + path);
 
             foreach (string fileName in fileEntries)
             {
@@ -2386,7 +2486,7 @@ namespace PrefabBrush.PrefabBrushUI
                 if (index > 0)
 
                     localPath += fileName.Substring(index).Replace('\\', '/').Replace("/SaveFiles", "");
-                PB_SaveObject t = (PB_SaveObject)AssetDatabase.LoadAssetAtPath(localPath, typeof(PB_SaveObject));
+                PB_SaveObject t = (PB_SaveObject) AssetDatabase.LoadAssetAtPath(localPath, typeof(PB_SaveObject));
                 if (t != null)
                     allSaves.Add(t);
             }
@@ -2441,7 +2541,8 @@ namespace PrefabBrush.PrefabBrushUI
             comfirmationName = nameToDelete;
             comfirmationId = idToDelete;
         }
-#endregion
+
+        #endregion
 
         void OnSceneGUI(SceneView sceneView)
         {

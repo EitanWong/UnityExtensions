@@ -20,7 +20,7 @@ namespace HierarchyPro.Editor
 
         static HierarchyCanvas()
         {
-            var itypes = typeof(HierarchyEditor).Assembly.GetTypes().ToList();
+            var itypes = typeof(HierarchyProEditor).Assembly.GetTypes().ToList();
             itypes.RemoveAll(type =>
                 (!typeof(IHierarchyShelf).IsAssignableFrom(type) &&
                  !typeof(IHierarchyElement).IsAssignableFrom(type)) || type.IsInterface || type.IsAbstract);
@@ -49,7 +49,7 @@ namespace HierarchyPro.Editor
             shelfContentElement.StylePosition(Position.Absolute);
             shelfContentElement.StyleMargin(0, 0, 19, 0);
             shelfContentElement.StylePadding(0, 0, 0, 0);
-            shelfContentElement.StyleMinWidth(HierarchyEditor.GLOBAL_SPACE_OFFSET_LEFT);
+            shelfContentElement.StyleMinWidth(HierarchyProEditor.GLOBAL_SPACE_OFFSET_LEFT);
             shelfContentElement.StyleBorderWidth(0, 1, 0, 1);
             shelfContentElement.StyleBorderRadius(0, 0, 0, 0);
             Color borderColor = new Color32(40, 40, 40, 255);

@@ -90,7 +90,7 @@ namespace HierarchyPro.Editor
                     {
                         Rect rect = new Rect(folout.headerElement.layout);
                         rect.position = evt.mousePosition;
-                        HierarchyEditor.DisplayObjectContextMenu(rect, component, 0);
+                        HierarchyProEditor.DisplayObjectContextMenu(rect, component, 0);
                         evt.StopPropagation();
                     }
                 });

@@ -59,7 +59,7 @@ MonoBehaviour:
   - task: "\u7F51\u683C\u6A21\u578B\u7F16\u8F91\u5668 \u96C6\u6210UV\u67E5\u770B\u5668"
     isComplete: 1
   - task: "\u7F51\u683C\u6A21\u578B\u7F16\u8F91\u5668\u96C6\u6210 \u6324\u51F9\u7F16\u8F91\u529F\u80FD"
-    isComplete: 0
+    isComplete: 1
   - task: "\u4FEE\u6539\u7F51\u683C\u6A21\u578B\u7F16\u8F91\u5668\u56FE\u6807\u52A0\u8F7D\u8DEF\u5F84"
     isComplete: 1
   - task: "\u4FEE\u6539MeshEditor\u5404\u6A21\u5757\u56FE\u6807\u4ECEResources\u4E2D\u52A0\u8F7D"
@@ -73,4 +73,12 @@ MonoBehaviour:
   - task: "README\u6587\u4EF6\u521B\u5EFA"
     isComplete: 0
   - task: "\u5F55\u5236\u63D2\u4EF6\u4ECB\u7ECD\u89C6\u9891"
+    isComplete: 1
+  - task: "xNode \u8282\u70B9\u7CFB\u7EDF\u6DFB\u52A0\u5230Package"
+    isComplete: 1
+  - task: "UnityMemo\u9B54\u6539\u6C49\u5316"
+    isComplete: 1
+  - task: "Navigation\u96C6\u6210\u8FDBPackage"
+    isComplete: 1
+  - task: "LOD\u4E00\u952E\u751F\u6210\u529F\u80FD"
     isComplete: 0

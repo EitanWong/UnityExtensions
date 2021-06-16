@@ -18,7 +18,7 @@
 			</div>
 		</div>
 		<div class="versionHeader">
-			<p class="versionText">Version: <b>1.25p03</b> </p>
+			<p class="versionText">Version: <b>1.26</b> </p>
 		</div>
 		<div class="leftContent">
 			<div class="leftContentInner">
@@ -249,7 +249,15 @@
         </br>
         </br>The beta version is incremented with every change related to the current beta generation (includes bug fixes, new features or changes to the manual). Beta versions are watermarked as "beta" in the Clip Editor and are not available via the Asset Store.</td>
     </tr>
-</table></br></br><h2 class="headline2" id="">UMotion V1.25p03</h2><h3 class="headline3" id="">New or Changed Features</h3><p class="textBlock">None</p><h3 class="headline3" id="">Bug Fixes</h3><ul class="listMain">
+</table></br></br><h2 class="headline2" id="">UMotion V1.26</h2><h3 class="headline3" id="">New or Changed Features</h3><ul class="listMain">
+    <li class="listItem"><span class="listText">Changed the default value of the "Animator Foot/Hand IK" setting in the clip import settings to OFF. This change was introduced to be in-line with Unity's Animator default value for Foot IK (OFF). Please note that in Unity Timeline, Foot IK is ON by default! The new default value is automatically used by all new UMotion project files.</span></li>
+    <li class="listItem"><span class="listText">Changed the default value of the FBX export write mode to "Update Existing File".</span></li>
+    <li class="listItem"><span class="listText">Added info texts to the export settings dialog that are answering some of the most commonly asked support requests.</span></li>
+    <li class="listItem"><span class="listText">It is now possible to add an empty GameObject to the hierarchy of your animated 3D model in Unity and name it the same as a custom transform in your UMotion Project (e.g. "IK_Hand_R"). When assigning the 3D model to the pose editor, UMotion is automatically going to ask if it should convert the custom transform defined in the UMotion project to the existing one. This is useful when the IK handle positions/rotations should also be included in the exported animation.</span></li>
+</ul><h3 class="headline3" id="">Bug Fixes</h3><ul class="listMain">
+    <li class="listItem"><span class="listText">Fixed that when assigning a character to the pose editor, in some special cases the error message "Editing the hierachy of a GameObject that is currently used as UMotion preview object is not allowed." is shown.</span></li>
+    <li class="listItem"><span class="listText">Fixed that copy and pasting keys from one animated property to another only copied the X component.</span></li>
+</ul><h3 class="headline3" id="">Manual Changes</h3><p class="textBlock">None</p></br></br><h2 class="headline2" id="">UMotion V1.25p03</h2><h3 class="headline3" id="">New or Changed Features</h3><p class="textBlock">None</p><h3 class="headline3" id="">Bug Fixes</h3><ul class="listMain">
     <li class="listItem"><span class="listText">Fixed that the docked clip editor window can't be resized in Unity 2021.2.</span></li>
     <li class="listItem"><span class="listText">Fixed a null reference exception when switching from config mode to pose mode and there are at least two custom property constraints in "component property" mode that have nothing assigned to the "object" field.</span></li>
 </ul><h3 class="headline3" id="">Manual Changes</h3><p class="textBlock">None</p></br></br><h2 class="headline2" id="">UMotion V1.25p02</h2><h3 class="headline3" id="">New or Changed Features</h3><p class="textBlock">None</p><h3 class="headline3" id="">Bug Fixes</h3><ul class="listMain">

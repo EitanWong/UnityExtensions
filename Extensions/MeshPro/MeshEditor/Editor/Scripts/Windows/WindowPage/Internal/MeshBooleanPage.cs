@@ -18,7 +18,7 @@ public class MeshBooleanPage : MEDR_Page
         PageName = "布尔运算";
         PageIcon = Resources.Load<Texture2D>(EditorGUIUtility.isProSkin
             ? "Textures/MeshBooleanWhite"
-            : "MeshBooleanBlack");
+            : "Textures/MeshBooleanBlack");
         PageToolTips = "布尔运算工具\n进行模型的布尔运算";
         intersectionGUIContent = new GUIContent("交集", Resources.Load<Texture2D>("Textures/Intersection"));
         unionGUIContent = new GUIContent("并集", Resources.Load<Texture2D>("Textures/Union"));

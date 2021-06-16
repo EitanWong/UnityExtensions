@@ -152,9 +152,8 @@ public class MeshEditPage : MEDR_Page
     protected override void OnSceneGUI()
     {
         if (!IsEdit || CheckFields == null || CheckFields.Count <= 0) return; //如果没有在编辑直接返回
-        //if (target) Selection.activeObject = target; //锁定当前对象
         Selection.activeObject = CheckFields[0].Filter.gameObject;
-
+        HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
         ToolStateCheck(); //工具状态检测
         CaptureHoverTarget(); //捕捉鼠标移入对象
         CaptureClickTarget(); //捕捉鼠标点击对象

@@ -21,6 +21,8 @@ namespace TransformPro.MeshPro.MeshEditor.Editor
         private static Vector2 scrollPos; //Scroll位置
         public static MeshEditorWindow window; //当前窗体
 
+        private static int lastCheckCount;
+
         #endregion
 
         #region Event
@@ -37,17 +39,10 @@ namespace TransformPro.MeshPro.MeshEditor.Editor
         {
             // var width = 300;
             // var height = 500;
-            window = (MeshEditorWindow) EditorWindow.GetWindow(
-                typeof(MeshEditorWindow),
-                true,
-                "网格模型编辑器");
+            Texture2D icon = Resources.Load<Texture2D>("Textures/MeshEditorIcon");
+            window = (MeshEditorWindow) EditorWindow.GetWindow(typeof(MeshEditorWindow), true);
+            window.titleContent = new GUIContent("网格模型编辑器", icon, "网格模型编辑器");
             window.Focus();
-
-            editorPages = MEDR_Internal_Utility.GetAllReflectionClassIns<MEDR_Page>(); //加载所有EditPage
-            foreach (var page in editorPages)
-            {
-                window.OnWindowDisable += page.OnCloseWindowCallFromMainWindow;
-            }
         }
 
         #region EditorBehavior
@@ -60,9 +55,11 @@ namespace TransformPro.MeshPro.MeshEditor.Editor
 
         void OnGUI()
         {
+            CheckAndLoadEditorPages();
             ExitWindowKeyboardCheck(); //检查退出快捷键
             DrawBasicMeshItemMenu(); //基本网格选择菜单
             DrawEditorPage();
+            CheckItemIsEmpty();
         }
 
         /// <summary>
@@ -81,9 +78,13 @@ namespace TransformPro.MeshPro.MeshEditor.Editor
         private void OnDisable()
         {
             OnWindowDisable?.Invoke();
-            foreach (var page in editorPages)
+            if (window)
             {
-                window.OnWindowDisable -= page.OnCloseWindowCallFromMainWindow;
+                foreach (var page in editorPages)
+                {
+                    if (page)
+                        window.OnWindowDisable -= page.OnCloseWindowCallFromMainWindow;
+                }
             }
 
             CheckItems.Clear();
@@ -278,6 +279,38 @@ namespace TransformPro.MeshPro.MeshEditor.Editor
         #endregion
 
         #region 内部方法
+
+        private void CheckItemIsEmpty()
+        {
+            if (lastCheckCount != CheckItems.Count)
+            {
+                if (CheckItems.Count <= 0)
+                {
+                    foreach (var page in editorPages)
+                    {
+                        page.OnCloseWindowCallFromMainWindow();
+                    }
+                }
+
+                lastCheckCount = CheckItems.Count;
+            }
+        }
+
+        private void CheckAndLoadEditorPages()
+        {
+            if (editorPages == null || editorPages.Count <= 0)
+            {
+                editorPages = MEDR_Internal_Utility.GetAllReflectionClassIns<MEDR_Page>(); //加载所有EditPage
+                if (window)
+                {
+                    foreach (var page in editorPages)
+                    {
+                        if (page)
+                            window.OnWindowDisable += page.OnCloseWindowCallFromMainWindow;
+                    }
+                }
+            }
+        }
 
         private void DropAreaGUI(float x, float y, float width, float height, Action DrawCallBack,
             Action<Object> DropCallBack, Action<Event> OnContextClick)

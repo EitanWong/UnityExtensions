@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: activeSave
   m_EditorClassIdentifier: 
   prefabList: []
-  prefabData: []
+  prefabData:
+  - prefab: {fileID: 5674111120151966940, guid: 93d6dc041bda741f3a4e91ec3ccfd21a, type: 3}
+    selected: 1
   paintType: 0
   brushSize: 1
   minBrushSize: 0.1
@@ -47,11 +49,11 @@ MonoBehaviour:
   parent: {fileID: 0}
   rotateToMatchSurface: 0
   rotateSurfaceDirection: 0
-  randomizeRotation: 0
+  randomizeRotation: 1
   minXRotation: 0
   maxXRotation: 0
   minYRotation: 0
-  maxYRotation: 0
+  maxYRotation: 360
   minZRotation: 0
   maxZRotation: 0
   scaleType: 0

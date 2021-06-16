@@ -18,7 +18,7 @@ namespace Hub.Editor.Scripts
         {
             // Get existing open window or if none, make a new one.
             window = GetWindow<HubWindow>(false);
-            window.titleContent = new GUIContent("Hub集线器", EditorGUIUtility.FindTexture("FilterByLabel@2x"), "分组管理工具");
+            window.titleContent = new GUIContent("Hub集线器", EditorGUIUtility.FindTexture("FilterByLabel@2x"), "Hub集线器");
             window.autoRepaintOnSceneChange = true;
             window.minSize = Vector2.one * 150;
             window.Focus();
