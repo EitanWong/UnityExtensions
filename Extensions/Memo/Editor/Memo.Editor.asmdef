@@ -1,0 +1,18 @@
+{
+    "name": "Memo.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b5682aad2a53741c4afdceae8421f0c6"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
