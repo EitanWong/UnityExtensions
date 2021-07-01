@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using Dialogue.Submodules.TextVariable;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -83,7 +84,7 @@ namespace Dialogue
                 if (tmpOp.condition.callback.target != null &&
                     tmpOp.condition.callback.Invoke() != tmpOp.condition.value)
                     continue;
-                result[i] = tmpOp.text;
+                result[i] = TextVariableProcessor.ProcessVariable(tmpOp.text);
             }
 
             return result;
@@ -103,7 +104,7 @@ namespace Dialogue
 
             }
             chatText = builder.ToString();
-            return chatText;
+            return TextVariableProcessor.ProcessVariable(chatText);
         }
 
         public Texture2D GetTexture()
