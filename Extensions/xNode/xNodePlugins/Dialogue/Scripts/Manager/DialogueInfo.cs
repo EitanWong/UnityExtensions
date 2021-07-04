@@ -25,8 +25,8 @@ namespace Dialogue
         public static DialogueInfo Build(Chat chat)
         {
             var characterName = chat.character ? chat.character.name : string.Empty;
-            
-            return new DialogueInfo(characterName, chat.GetText(), chat.GetOptionsText(),chat.GetTexture(),chat.character.characterTexture2D);
+            var characterTexture2D = chat.character ? chat.character.characterTexture2D : null;
+            return new DialogueInfo(characterName, chat.GetText(), chat.GetOptionsText(),chat.GetTexture(),characterTexture2D);
         }
     }
 }
