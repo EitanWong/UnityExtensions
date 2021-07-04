@@ -24,15 +24,16 @@ SOFTWARE.
 */
 #endregion
 
-#if UNITY_2017_3 || UNITY_2017_4 || UNITY_2018 || UNITY_2019 || UNITY_2020
+#if UNITY_2017_3 || UNITY_2017_4 || UNITY_2018 || UNITY_2019 || UNITY_2020 || UNITY_2021
 #define UNITY_MESH_INDEXFORMAT_SUPPORT
 #endif
 
 using System.Collections.Generic;
 using System.Linq;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Utility;
 using UnityEngine;
 
-namespace MeshEditor.UnityMeshSimplifier
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime
 {
     /// <summary>
     /// Contains methods for combining meshes.

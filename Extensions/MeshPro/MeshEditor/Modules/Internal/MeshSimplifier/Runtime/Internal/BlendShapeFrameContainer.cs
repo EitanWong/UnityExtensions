@@ -25,9 +25,10 @@ SOFTWARE.
 #endregion
 
 using System.Runtime.CompilerServices;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Utility;
 using UnityEngine;
 
-namespace MeshEditor.UnityMeshSimplifier.Internal
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Internal
 {
     internal class BlendShapeFrameContainer
     {

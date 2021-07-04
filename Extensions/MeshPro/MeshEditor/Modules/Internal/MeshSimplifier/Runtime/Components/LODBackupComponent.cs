@@ -26,7 +26,7 @@ SOFTWARE.
 
 using UnityEngine;
 
-namespace MeshEditor.UnityMeshSimplifier
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Components
 {
     [AddComponentMenu("")]
     internal class LODBackupComponent : MonoBehaviour

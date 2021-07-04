@@ -28,7 +28,7 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace MeshEditor.UnityMeshSimplifier
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime
 {
     /// <summary>
     /// A blend shape.

@@ -1,0 +1,32 @@
+﻿#pragma kernel CSMain
+ 
+uniform RWStructuredBuffer<float3> inputArray : register(u1);
+uniform RWStructuredBuffer<float3> exitArray : register(u2);
+int arrayCount;
+float probeSpacing;
+ 
+[numthreads(256, 1, 1)]
+void CSMain (uint3 id : SV_DispatchThreadID, int index : SV_GroupIndex)
+{
+    if (inputArray[id.x].x != 0 &&
+        inputArray[id.x].y != 0 &&
+        inputArray[id.x].z != 0)
+    {
+        for (int j = index; j < index + 255; j++)
+        {
+            if (inputArray[j].x != inputArray[id.x].x &&
+                inputArray[j].y != inputArray[id.x].y &&
+                inputArray[j].z != inputArray[id.x].z)
+            {
+                float dist = distance(inputArray[id.x], inputArray[j]);
+                
+                if (dist <= probeSpacing)
+                {
+                    inputArray[id.x] = float3 (0, 0, 0);
+                    exitArray[id.x] = float3 (0, 0, 0);
+                }
+            }
+        }
+    }
+}
+

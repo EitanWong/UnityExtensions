@@ -81,4 +81,4 @@ MonoBehaviour:
   - task: "Navigation\u96C6\u6210\u8FDBPackage"
     isComplete: 1
   - task: "LOD\u4E00\u952E\u751F\u6210\u529F\u80FD"
-    isComplete: 0
+    isComplete: 1

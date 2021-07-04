@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime;
 using MeshEditor.Editor.Scripts.Manager;
-using MeshEditor.UnityMeshSimplifier;
-using UnityEditor;
-using UnityEngine;
 using TransformPro.MeshPro.MeshEditor.Editor;
 using TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
 
 public class MeshSimplifierPage : MEDR_Page
 {
@@ -14,6 +17,10 @@ public class MeshSimplifierPage : MEDR_Page
     private static float mesh_LastSimplifierRate; //上一个赋值的压缩比例
     private static bool meshSimplifierFold; //是否点压缩选项开折页
     private MeshSimplifierConfig _config;
+    // ReSharper disable once InconsistentNaming
+
+    public float[] percentOfVerticesForEachLod =
+        {100.0f, 75.0f, 65.0f, 45.0f, 35.0f, 25.0f, 15.0f, 10.0f, 5.0f}; //9
 
     #endregion
 
@@ -30,6 +37,8 @@ public class MeshSimplifierPage : MEDR_Page
     protected override void OnGUI()
     {
         MeshSimplifierMenu();
+        EditorGUILayout.Space(20);
+        LODGenerationMenu();
     }
 
     /// <summary>
@@ -72,7 +81,6 @@ public class MeshSimplifierPage : MEDR_Page
                 }
             }
 
-
             if (mesh_LastSimplifierRate != meshSimplifierRate && GUILayout.Button("预览"))
             {
                 SimplifiedMeshs.Clear();
@@ -102,10 +110,180 @@ public class MeshSimplifierPage : MEDR_Page
                 }
             }
         }
+    }
 
-        // }
-        //
-        // EditorGUILayout.EndFoldoutHeaderGroup();
+    /// <summary>
+    /// 生成LODMenu
+    /// </summary>
+    private void LODGenerationMenu()
+    {
+        if (CheckFields == null || CheckFields.Count <= 0) return;
+        var editMeshRenderer = CheckFields[0].Renderer;
+        var editMeshFilter = CheckFields[0].Filter;
+        EditorGUILayout.BeginVertical("box");
+        GUILayout.Space(10);
+        EditorGUILayout.LabelField("LOD生成设置", EditorStyles.boldLabel);
+        GUILayout.Space(10);
+        EditorGUI.indentLevel += 1;
+        _config.MEDR_MeshSimplifier_LODDistanceMultiplier = EditorGUILayout.Slider(new GUIContent("LOD距离倍乘数"),
+            _config.MEDR_MeshSimplifier_LODDistanceMultiplier, 0.001f, 0.999f);
+        GUILayout.Space(10);
+        _config.MEDR_MeshSimplifier_DetailsCount = EditorGUILayout.IntSlider(new GUIContent("LOD级数",
+                "LOD 系统应生成的 LOD 数量."),
+            _config.MEDR_MeshSimplifier_DetailsCount, 1, 8);
+        GUILayout.Space(10);
+        _config.MEDR_MeshSimplifier_LODGroupFadeMode = (int) (LODFadeMode) EditorGUILayout.EnumPopup("LOD组过度模式",
+            (LODFadeMode) _config.MEDR_MeshSimplifier_LODGroupFadeMode);
+        GUILayout.Space(10);
+        EditorGUI.indentLevel -= 1;
+        EditorGUILayout.LabelField("LOD层级设置", EditorStyles.boldLabel);
+        EditorGUI.indentLevel += 1;
+        for (int i = 0; i <= _config.MEDR_MeshSimplifier_DetailsCount; i++)
+        {
+            if (i == 0)
+                continue;
+            percentOfVerticesForEachLod[i] = EditorGUILayout.Slider(new GUIContent("LOD 顶点百分比 " + i,
+                    "它将包含在 LOD 中的顶点百分比" + i + " 在网格中."),
+                percentOfVerticesForEachLod[i], 1f, 100f);
+        }
+
+        EditorGUI.indentLevel -= 1;
+        if (GUILayout.Button("一键生成LOD"))
+        {
+            try
+            {
+                EditorUtility.DisplayProgressBar("生成LOD", "生成LOD中", 0f);
+                var screenRelativeTransitionHeight = 1f;
+                foreach (var item in CheckFields)
+                {
+                    var lodGroup = item.Filter.gameObject.GetComponent<LODGroup>();
+                    if (!lodGroup)
+                        lodGroup = item.Filter.gameObject.AddComponent<LODGroup>();
+                    DestroyChildrenGameObjectByName(lodGroup.gameObject, "LODs");
+                    var groupRoot = new GameObject("LODs");
+                    groupRoot.transform.SetParent(lodGroup.transform);
+                    groupRoot.transform.localPosition = Vector3.zero;
+                    groupRoot.transform.localScale = Vector3.one;
+                    groupRoot.transform.localEulerAngles = Vector3.zero;
+
+                    var rootName = string.Format("{0}_{1}", item.Filter.sharedMesh.name,
+                        item.Filter.sharedMesh.GetInstanceID());
+                    ReCreateDirectory(_config.MEDR_MeshSimplifier_LODSavePath + string.Format("/{0}", rootName));
+
+                    LOD[] lods = new LOD[_config.MEDR_MeshSimplifier_DetailsCount];
+                    Renderer[] defaultLODRenderers = new Renderer[1];
+                    defaultLODRenderers[0] = item.Renderer;
+                    screenRelativeTransitionHeight *= _config.MEDR_MeshSimplifier_LODDistanceMultiplier;
+                    lods[0] = new LOD(screenRelativeTransitionHeight, defaultLODRenderers);
+                    for (int i = 1; i < _config.MEDR_MeshSimplifier_DetailsCount; i++)
+                    {
+                        GameObject lodObj =
+                            new GameObject(string.Format("{0}_LOD_Level{1}", rootName, i));
+                        lodObj.transform.parent = groupRoot.transform;
+                        lodObj.transform.localPosition = Vector3.zero;
+                        lodObj.transform.localScale = Vector3.one;
+                        lodObj.transform.localEulerAngles = Vector3.zero;
+                        var filter = lodObj.AddComponent<MeshFilter>();
+                        // ReSharper disable once PossibleLossOfFraction
+
+
+                        var simpMesh = SimplifierMesh(item.Filter.sharedMesh,
+                            percentOfVerticesForEachLod[i] / 100f);
+                        simpMesh.name = lodObj.name;
+                        // ReSharper disable once InconsistentNaming
+                        var LODMesh = SaveLOD(rootName, simpMesh);
+
+                        filter.sharedMesh = LODMesh;
+                        // ReSharper disable once InconsistentNaming
+                        Renderer[] LODRenderers = new Renderer[1];
+                        LODRenderers[0] = lodObj.AddComponent<MeshRenderer>();
+                        LODRenderers[0].sharedMaterial = item.Renderer.sharedMaterial;
+                        screenRelativeTransitionHeight *= _config.MEDR_MeshSimplifier_LODDistanceMultiplier;
+                        lods[i] = new LOD(screenRelativeTransitionHeight, LODRenderers);
+                    }
+
+                    lodGroup.fadeMode = (LODFadeMode) _config.MEDR_MeshSimplifier_LODGroupFadeMode;
+                    lodGroup.SetLODs(lods);
+                    lodGroup.RecalculateBounds();
+                    //DestroyImmediate(item.Renderer);
+                    EditorSceneManager.MarkSceneDirty(item.Filter.gameObject.scene);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+                EditorUtility.DisplayDialog("生成LOD失败!", ex.Message, "确定");
+            }
+            finally
+            {
+                EditorUtility.ClearProgressBar();
+            }
+        }
+
+        EditorGUILayout.EndVertical();
+    }
+
+
+    private void DestroyChildrenGameObjectByName(GameObject parent, string name)
+    {
+        var children = parent.GetComponentsInChildren<Transform>();
+        for (int i = children.Length - 1; i > 0; i--)
+        {
+            if (children[i].gameObject.name.Equals(name))
+            {
+                DestroyImmediate(children[i].gameObject);
+                DestroyChildrenGameObjectByName(parent, name);
+                break;
+            }
+        }
+    }
+
+    private Mesh SaveLOD(string folderName, Mesh lodMesh)
+    {
+        if (_config.MEDR_MeshSimplifier_LODSavePath == null)
+            return lodMesh;
+        var path = _config.MEDR_MeshSimplifier_LODSavePath + string.Format("/{0}", folderName);
+        var assetPath = path + string.Format("/{0}.mesh", lodMesh.name);
+        var saveMesh = CopyNewMesh(lodMesh);
+        AssetDatabase.CreateAsset(saveMesh, assetPath);
+        AssetDatabase.SaveAssets();
+        return saveMesh;
+    }
+
+    /// <summary>
+    /// 重新创建目录
+    /// </summary>
+    /// <param name="url"></param>
+    /// <returns></returns>
+    public static bool ReCreateDirectory(string url)
+    {
+        try
+        {
+            if (Directory.Exists(url))
+                AssetDatabase.DeleteAsset(url);
+            if (!Directory.Exists(url)) //如果不存在就创建file文件夹　　             　　              
+                Directory.CreateDirectory(url); //创建该文件夹
+            return true;
+        }
+        catch (Exception ex)
+        {
+            return false;
+        }
+    }
+
+    public static Mesh CopyNewMesh(Mesh origin)
+    {
+        Mesh r = new Mesh();
+        r.name = origin.name;
+        r.vertices = origin.vertices;
+        r.triangles = origin.triangles;
+        r.uv = origin.uv;
+        r.normals = origin.normals;
+        r.SetVertices(origin.vertices);
+        r.RecalculateBounds();
+        r.RecalculateNormals();
+        r.RecalculateTangents();
+        return r;
     }
 
     // ReSharper disable Unity.PerformanceAnalysis

@@ -10,7 +10,7 @@ using TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base;
 
 public class MeshEditorPreference : Editor
 {
-    private static string Version = "v0.1.2";
+    private static string Version = "v0.1.3";
     private static Vector2 scrollPositionSettingArea;
     private static Vector2 scrollPositionPageButtonArea;
     private static Vector2 scrollPositionTitle;
@@ -37,7 +37,6 @@ public class MeshEditorPreference : Editor
                 InitSettingPage();
                 EditorGUILayout.BeginHorizontal();
                 DrawLeftAreaGUI();
-                GUILayout.FlexibleSpace();
                 DrawSettingGUIArea();
                 EditorGUILayout.EndHorizontal();
                 

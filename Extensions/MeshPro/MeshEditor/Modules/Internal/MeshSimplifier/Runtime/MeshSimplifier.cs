@@ -37,21 +37,23 @@ SOFTWARE.
 //https://github.com/sp4cerat/Fast-Quadric-Mesh-Simplification
 #endregion
 
-#if UNITY_2018_2 || UNITY_2018_3 || UNITY_2018_4 || UNITY_2019 || UNITY_2020
+#if UNITY_2018_2 || UNITY_2018_3 || UNITY_2018_4 || UNITY_2019 || UNITY_2020 || UNITY_2021
 #define UNITY_8UV_SUPPORT
 #endif
 
-#if UNITY_2017_3 || UNITY_2017_4 || UNITY_2018 || UNITY_2019 || UNITY_2020
+#if UNITY_2017_3 || UNITY_2017_4 || UNITY_2018 || UNITY_2019 || UNITY_2020 || UNITY_2021
 #define UNITY_MESH_INDEXFORMAT_SUPPORT
 #endif
 
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using MeshEditor.UnityMeshSimplifier.Internal;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Internal;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Math;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Utility;
 using UnityEngine;
 
-namespace MeshEditor.UnityMeshSimplifier
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime
 {
     /// <summary>
     /// The mesh simplifier.
@@ -68,7 +70,7 @@ namespace MeshEditor.UnityMeshSimplifier
         #endregion
 
         #region Fields
-        SimplificationOptions simplificationOptions = SimplificationOptions.Default;
+        private SimplificationOptions simplificationOptions = SimplificationOptions.Default;
         private bool verbose = false;
 
         private int subMeshCount = 0;
@@ -110,17 +112,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// Gets or sets if the border edges should be preserved.
         /// Default value: false
         /// </summary>
-        [Obsolete("Use the 'MeshSimplifier.PreserveBorderEdges' property instead.", false)]
-        public bool PreserveBorders
-        {
-            get { return this.PreserveBorderEdges; }
-            set { this.PreserveBorderEdges = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets if the border edges should be preserved.
-        /// Default value: false
-        /// </summary>
+        [Obsolete("Use MeshSimplifier.SimplificationOptions instead.", false)]
         public bool PreserveBorderEdges
         {
             get { return simplificationOptions.PreserveBorderEdges; }
@@ -131,17 +123,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// Gets or sets if the UV seam edges should be preserved.
         /// Default value: false
         /// </summary>
-        [Obsolete("Use the 'MeshSimplifier.PreserveUVSeamEdges' property instead.", false)]
-        public bool PreserveSeams
-        {
-            get { return this.PreserveUVSeamEdges; }
-            set { this.PreserveUVSeamEdges = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets if the UV seam edges should be preserved.
-        /// Default value: false
-        /// </summary>
+        [Obsolete("Use MeshSimplifier.SimplificationOptions instead.", false)]
         public bool PreserveUVSeamEdges
         {
             get { return simplificationOptions.PreserveUVSeamEdges; }
@@ -152,17 +134,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// Gets or sets if the UV foldover edges should be preserved.
         /// Default value: false
         /// </summary>
-        [Obsolete("Use the 'MeshSimplifier.PreserveUVFoldoverEdges' property instead.", false)]
-        public bool PreserveFoldovers
-        {
-            get { return this.PreserveUVFoldoverEdges; }
-            set { this.PreserveUVFoldoverEdges = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets if the UV foldover edges should be preserved.
-        /// Default value: false
-        /// </summary>
+        [Obsolete("Use MeshSimplifier.SimplificationOptions instead.", false)]
         public bool PreserveUVFoldoverEdges
         {
             get { return simplificationOptions.PreserveUVFoldoverEdges; }
@@ -173,6 +145,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// Gets or sets if the discrete curvature of the mesh surface be taken into account during simplification.
         /// Default value: false
         /// </summary>
+        [Obsolete("Use MeshSimplifier.SimplificationOptions instead.", false)]
         public bool PreserveSurfaceCurvature
         {
             get { return simplificationOptions.PreserveSurfaceCurvature; }
@@ -185,6 +158,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// the same position as the same vertex while separating the attributes.
         /// Default value: true
         /// </summary>
+        [Obsolete("Use MeshSimplifier.SimplificationOptions instead.", false)]
         public bool EnableSmartLink
         {
             get { return simplificationOptions.EnableSmartLink; }
@@ -196,6 +170,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// Sometimes a lower maximum count might be desired in order to lower the performance cost.
         /// Default value: 100
         /// </summary>
+        [Obsolete("Use MeshSimplifier.SimplificationOptions instead.", false)]
         public int MaxIterationCount
         {
             get { return simplificationOptions.MaxIterationCount; }
@@ -206,6 +181,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// Gets or sets the agressiveness of the mesh simplification. Higher number equals higher quality, but more expensive to run.
         /// Default value: 7.0
         /// </summary>
+        [Obsolete("Use MeshSimplifier.SimplificationOptions instead.", false)]
         public double Agressiveness
         {
             get { return simplificationOptions.Agressiveness; }
@@ -226,6 +202,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// Gets or sets the maximum distance between two vertices in order to link them.
         /// Note that this value is only used if EnableSmartLink is true.
         /// </summary>
+        [Obsolete("Use MeshSimplifier.SimplificationOptions instead.", false)]
         public double VertexLinkDistance
         {
             get { return simplificationOptions.VertexLinkDistance; }
@@ -237,10 +214,11 @@ namespace MeshEditor.UnityMeshSimplifier
         /// Note that this value is only used if EnableSmartLink is true.
         /// Default value: double.Epsilon
         /// </summary>
+        [Obsolete("Use MeshSimplifier.SimplificationOptions instead.", false)]
         public double VertexLinkDistanceSqr
         {
             get { return simplificationOptions.VertexLinkDistance * simplificationOptions.VertexLinkDistance; }
-            set { simplificationOptions.VertexLinkDistance = Math.Sqrt(value); }
+            set { simplificationOptions.VertexLinkDistance = System.Math.Sqrt(value); }
         }
 
         /// <summary>
@@ -584,7 +562,7 @@ namespace MeshEditor.UnityMeshSimplifier
             double denom = d00 * d11 - d01 * d01;
 
             // Make sure the denominator is not too small to cause math problems
-            if (Math.Abs(denom) < DenomEpilson)
+            if (System.Math.Abs(denom) < DenomEpilson)
             {
                 denom = DenomEpilson;
             }
@@ -636,7 +614,7 @@ namespace MeshEditor.UnityMeshSimplifier
                 Vector3d d2 = vertices[id2].p - p;
                 d2.Normalize();
                 double dot = Vector3d.Dot(ref d1, ref d2);
-                if (Math.Abs(dot) > 0.999)
+                if (System.Math.Abs(dot) > 0.999)
                     return true;
 
                 Vector3d n;
@@ -806,9 +784,6 @@ namespace MeshEditor.UnityMeshSimplifier
 
             Vector3d p;
             Vector3 barycentricCoord;
-            var preserveBorderEdges = PreserveBorderEdges;
-            var preserveUVSeamEdges = PreserveUVSeamEdges;
-            var preserveUVFoldoverEdges = PreserveUVFoldoverEdges;
             for (int tid = 0; tid < triangleCount; tid++)
             {
                 if (triangles[tid].dirty || triangles[tid].deleted || triangles[tid].err3 > threshold)
@@ -835,13 +810,13 @@ namespace MeshEditor.UnityMeshSimplifier
                     else if (vertices[i0].uvFoldoverEdge != vertices[i1].uvFoldoverEdge)
                         continue;
                     // If borders should be preserved
-                    else if (preserveBorderEdges && vertices[i0].borderEdge)
+                    else if (simplificationOptions.PreserveBorderEdges && vertices[i0].borderEdge)
                         continue;
                     // If seams should be preserved
-                    else if (preserveUVSeamEdges && vertices[i0].uvSeamEdge)
+                    else if (simplificationOptions.PreserveUVSeamEdges && vertices[i0].uvSeamEdge)
                         continue;
                     // If foldovers should be preserved
-                    else if (preserveUVFoldoverEdges && vertices[i0].uvFoldoverEdge)
+                    else if (simplificationOptions.PreserveUVFoldoverEdges && vertices[i0].uvFoldoverEdge)
                         continue;
 
                     // Compute vertex to collapse to
@@ -960,8 +935,7 @@ namespace MeshEditor.UnityMeshSimplifier
                 int borderVertexCount = 0;
                 double borderMinX = double.MaxValue;
                 double borderMaxX = double.MinValue;
-                var enableSmartLink = EnableSmartLink;
-                var vertexLinkDistanceSqr = VertexLinkDistanceSqr;
+                var vertexLinkDistanceSqr = simplificationOptions.VertexLinkDistance * simplificationOptions.VertexLinkDistance;
                 for (int i = 0; i < vertexCount; i++)
                 {
                     int tstart = vertices[i].tstart;
@@ -1006,7 +980,7 @@ namespace MeshEditor.UnityMeshSimplifier
                             vertices[id].borderEdge = true;
                             ++borderVertexCount;
 
-                            if (enableSmartLink)
+                            if (simplificationOptions.EnableSmartLink)
                             {
                                 if (vertices[id].p.x < borderMinX)
                                 {
@@ -1021,7 +995,7 @@ namespace MeshEditor.UnityMeshSimplifier
                     }
                 }
 
-                if (enableSmartLink)
+                if (simplificationOptions.EnableSmartLink)
                 {
                     // First find all border vertices
                     var borderVertices = new BorderVertex[borderVertexCount];
@@ -1041,8 +1015,8 @@ namespace MeshEditor.UnityMeshSimplifier
                     Array.Sort(borderVertices, 0, borderIndexCount, BorderVertexComparer.instance);
 
                     // Calculate the maximum hash distance based on the maximum vertex link distance
-                    double vertexLinkDistance = Math.Sqrt(vertexLinkDistanceSqr);
-                    int hashMaxDistance = Math.Max((int)((vertexLinkDistance / borderAreaWidth) * int.MaxValue), 1);
+                    double vertexLinkDistance = System.Math.Sqrt(vertexLinkDistanceSqr);
+                    int hashMaxDistance = System.Math.Max((int)((vertexLinkDistance / borderAreaWidth) * int.MaxValue), 1);
 
                     // Then find identical border vertices and bind them together as one
                     for (int i = 0; i < borderIndexCount; i++)
@@ -1732,151 +1706,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// </summary>
         /// <param name="channel">The channel index.</param>
         /// <param name="uvs">The UVs.</param>
-        public void SetUVs(int channel, Vector2[] uvs)
-        {
-            if (channel < 0 || channel >= UVChannelCount)
-                throw new ArgumentOutOfRangeException(nameof(channel));
-
-            if (uvs != null && uvs.Length > 0)
-            {
-                if (vertUV2D == null)
-                    vertUV2D = new UVChannels<Vector2>();
-
-                int uvCount = uvs.Length;
-                var uvSet = vertUV2D[channel];
-                if (uvSet != null)
-                {
-                    uvSet.Resize(uvCount);
-                }
-                else
-                {
-                    uvSet = new ResizableArray<Vector2>(uvCount, uvCount);
-                    vertUV2D[channel] = uvSet;
-                }
-
-                var uvData = uvSet.Data;
-                uvs.CopyTo(uvData, 0);
-            }
-            else
-            {
-                if (vertUV2D != null)
-                {
-                    vertUV2D[channel] = null;
-                }
-            }
-
-            if (vertUV3D != null)
-            {
-                vertUV3D[channel] = null;
-            }
-            if (vertUV4D != null)
-            {
-                vertUV4D[channel] = null;
-            }
-        }
-
-        /// <summary>
-        /// Sets the UVs (3D) for a specific channel.
-        /// </summary>
-        /// <param name="channel">The channel index.</param>
-        /// <param name="uvs">The UVs.</param>
-        public void SetUVs(int channel, Vector3[] uvs)
-        {
-            if (channel < 0 || channel >= UVChannelCount)
-                throw new ArgumentOutOfRangeException(nameof(channel));
-
-            if (uvs != null && uvs.Length > 0)
-            {
-                if (vertUV3D == null)
-                    vertUV3D = new UVChannels<Vector3>();
-
-                int uvCount = uvs.Length;
-                var uvSet = vertUV3D[channel];
-                if (uvSet != null)
-                {
-                    uvSet.Resize(uvCount);
-                }
-                else
-                {
-                    uvSet = new ResizableArray<Vector3>(uvCount, uvCount);
-                    vertUV3D[channel] = uvSet;
-                }
-
-                var uvData = uvSet.Data;
-                uvs.CopyTo(uvData, 0);
-            }
-            else
-            {
-                if (vertUV3D != null)
-                {
-                    vertUV3D[channel] = null;
-                }
-            }
-
-            if (vertUV2D != null)
-            {
-                vertUV2D[channel] = null;
-            }
-            if (vertUV4D != null)
-            {
-                vertUV4D[channel] = null;
-            }
-        }
-
-        /// <summary>
-        /// Sets the UVs (4D) for a specific channel.
-        /// </summary>
-        /// <param name="channel">The channel index.</param>
-        /// <param name="uvs">The UVs.</param>
-        public void SetUVs(int channel, Vector4[] uvs)
-        {
-            if (channel < 0 || channel >= UVChannelCount)
-                throw new ArgumentOutOfRangeException(nameof(channel));
-
-            if (uvs != null && uvs.Length > 0)
-            {
-                if (vertUV4D == null)
-                    vertUV4D = new UVChannels<Vector4>();
-
-                int uvCount = uvs.Length;
-                var uvSet = vertUV4D[channel];
-                if (uvSet != null)
-                {
-                    uvSet.Resize(uvCount);
-                }
-                else
-                {
-                    uvSet = new ResizableArray<Vector4>(uvCount, uvCount);
-                    vertUV4D[channel] = uvSet;
-                }
-
-                var uvData = uvSet.Data;
-                uvs.CopyTo(uvData, 0);
-            }
-            else
-            {
-                if (vertUV4D != null)
-                {
-                    vertUV4D[channel] = null;
-                }
-            }
-
-            if (vertUV2D != null)
-            {
-                vertUV2D[channel] = null;
-            }
-            if (vertUV3D != null)
-            {
-                vertUV3D[channel] = null;
-            }
-        }
-
-        /// <summary>
-        /// Sets the UVs (2D) for a specific channel.
-        /// </summary>
-        /// <param name="channel">The channel index.</param>
-        /// <param name="uvs">The UVs.</param>
-        public void SetUVs(int channel, List<Vector2> uvs)
+        public void SetUVs(int channel, IList<Vector2> uvs)
         {
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException(nameof(channel));
@@ -1924,7 +1754,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// </summary>
         /// <param name="channel">The channel index.</param>
         /// <param name="uvs">The UVs.</param>
-        public void SetUVs(int channel, List<Vector3> uvs)
+        public void SetUVs(int channel, IList<Vector3> uvs)
         {
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException(nameof(channel));
@@ -1972,7 +1802,7 @@ namespace MeshEditor.UnityMeshSimplifier
         /// </summary>
         /// <param name="channel">The channel index.</param>
         /// <param name="uvs">The UVs.</param>
-        public void SetUVs(int channel, List<Vector4> uvs)
+        public void SetUVs(int channel, IList<Vector4> uvs)
         {
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException(nameof(channel));
@@ -2016,24 +1846,26 @@ namespace MeshEditor.UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Sets the UVs for a specific channel and automatically detects the used components.
+        /// Sets the UVs for a specific channel with a specific count of UV components.
         /// </summary>
         /// <param name="channel">The channel index.</param>
         /// <param name="uvs">The UVs.</param>
-        public void SetUVsAuto(int channel, List<Vector4> uvs)
+        /// <param name="uvComponentCount">The count of UV components.</param>
+        public void SetUVs(int channel, IList<Vector4> uvs, int uvComponentCount)
         {
             if (channel < 0 || channel >= UVChannelCount)
                 throw new ArgumentOutOfRangeException(nameof(channel));
+            else if (uvComponentCount < 0 || uvComponentCount > 4)
+                throw new ArgumentOutOfRangeException(nameof(uvComponentCount));
 
-            if (uvs != null && uvs.Count > 0)
+            if (uvs != null && uvs.Count > 0 && uvComponentCount > 0)
             {
-                int usedComponents = MeshUtils.GetUsedUVComponents(uvs);
-                if (usedComponents <= 2)
+                if (uvComponentCount <= 2)
                 {
                     var uv2D = MeshUtils.ConvertUVsTo2D(uvs);
                     SetUVs(channel, uv2D);
                 }
-                else if (usedComponents == 3)
+                else if (uvComponentCount == 3)
                 {
                     var uv3D = MeshUtils.ConvertUVsTo3D(uvs);
                     SetUVs(channel, uv3D);
@@ -2058,6 +1890,20 @@ namespace MeshEditor.UnityMeshSimplifier
                     vertUV4D[channel] = null;
                 }
             }
+        }
+
+        /// <summary>
+        /// Sets the UVs for a specific channel and automatically detects the used components.
+        /// </summary>
+        /// <param name="channel">The channel index.</param>
+        /// <param name="uvs">The UVs.</param>
+        public void SetUVsAuto(int channel, IList<Vector4> uvs)
+        {
+            if (channel < 0 || channel >= UVChannelCount)
+                throw new ArgumentOutOfRangeException(nameof(channel));
+
+            int uvComponentCount = MeshUtils.GetUsedUVComponents(uvs);
+            SetUVs(channel, uvs, uvComponentCount);
         }
         #endregion
         #endregion
@@ -2135,7 +1981,7 @@ namespace MeshEditor.UnityMeshSimplifier
 
             if (this.blendShapes == null)
             {
-                this.blendShapes = new ResizableArray<BlendShapeContainer>(Math.Max(4, blendShapes.Length), 0);
+                this.blendShapes = new ResizableArray<BlendShapeContainer>(System.Math.Max(4, blendShapes.Length), 0);
             }
 
             for (int i = 0; i < blendShapes.Length; i++)
@@ -2160,6 +2006,13 @@ namespace MeshEditor.UnityMeshSimplifier
             if (mesh == null)
                 throw new ArgumentNullException(nameof(mesh));
 
+            int uvComponentCount = simplificationOptions.UVComponentCount;
+            if (simplificationOptions.ManualUVComponentCount)
+            {
+                if (uvComponentCount < 0 || uvComponentCount > 4)
+                    throw new InvalidOperationException("The UV component count cannot be below 0 or above 4.");
+            }
+
             this.Vertices = mesh.vertices;
             this.Normals = mesh.normals;
             this.Tangents = mesh.tangents;
@@ -2170,8 +2023,36 @@ namespace MeshEditor.UnityMeshSimplifier
 
             for (int channel = 0; channel < UVChannelCount; channel++)
             {
-                var uvs = MeshUtils.GetMeshUVs(mesh, channel);
-                SetUVsAuto(channel, uvs);
+                if (simplificationOptions.ManualUVComponentCount)
+                {
+                    switch (uvComponentCount)
+                    {
+                        case 1:
+                        case 2:
+                            {
+                                var uvs = MeshUtils.GetMeshUVs2D(mesh, channel);
+                                SetUVs(channel, uvs);
+                                break;
+                            }
+                        case 3:
+                            {
+                                var uvs = MeshUtils.GetMeshUVs3D(mesh, channel);
+                                SetUVs(channel, uvs);
+                                break;
+                            }
+                        case 4:
+                            {
+                                var uvs = MeshUtils.GetMeshUVs(mesh, channel);
+                                SetUVs(channel, uvs);
+                                break;
+                            }
+                    }
+                }
+                else
+                {
+                    var uvs = MeshUtils.GetMeshUVs(mesh, channel);
+                    SetUVsAuto(channel, uvs);
+                }
             }
 
             var blendShapes = MeshUtils.GetMeshBlendShapes(mesh);
@@ -2210,9 +2091,7 @@ namespace MeshEditor.UnityMeshSimplifier
             var vertices = this.vertices.Data;
             int targetTrisCount = Mathf.RoundToInt(triangleCount * quality);
 
-            var maxIterationCount = MaxIterationCount;
-            var agressiveness = Agressiveness;
-            for (int iteration = 0; iteration < maxIterationCount; iteration++)
+            for (int iteration = 0; iteration < simplificationOptions.MaxIterationCount; iteration++)
             {
                 if ((startTrisCount - deletedTris) <= targetTrisCount)
                     break;
@@ -2236,7 +2115,7 @@ namespace MeshEditor.UnityMeshSimplifier
                 //
                 // The following numbers works well for most models.
                 // If it does not, try to adjust the 3 parameters
-                double threshold = 0.000000001 * Math.Pow(iteration + 3, agressiveness);
+                double threshold = 0.000000001 * System.Math.Pow(iteration + 3, simplificationOptions.Agressiveness);
 
                 if (verbose)
                 {
@@ -2329,6 +2208,7 @@ namespace MeshEditor.UnityMeshSimplifier
             List<Vector2>[] uvs2D = null;
             List<Vector3>[] uvs3D = null;
             List<Vector4>[] uvs4D = null;
+
             if (vertUV2D != null)
             {
                 uvs2D = new List<Vector2>[UVChannelCount];

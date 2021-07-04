@@ -1,0 +1,30 @@
+﻿#pragma kernel CSMain
+ 
+uniform RWStructuredBuffer<float3> inputArray : register(u1);
+uniform RWStructuredBuffer<float3> exitArray : register(u2);
+float threshold;
+
+float hash11 (float p)
+{
+    p = frac (p * 0.1031);
+    p *= p + 33.33;
+    p *= p + p;
+
+    return frac(p);
+}
+ 
+[numthreads(256, 1, 1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	float result = hash11(id.x);
+    
+    if (result >= threshold)
+    {
+        exitArray[id.x] = float3(0, 0, 0);
+	}   
+    else
+    {
+        exitArray[id.x] = float3(inputArray[id.x].x, inputArray[id.x].y, inputArray[id.x].z);        
+	}
+}
+

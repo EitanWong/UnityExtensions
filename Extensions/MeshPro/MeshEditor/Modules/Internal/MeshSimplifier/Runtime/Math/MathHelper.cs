@@ -24,10 +24,9 @@ SOFTWARE.
 */
 #endregion
 
-using System;
 using System.Runtime.CompilerServices;
 
-namespace MeshEditor.UnityMeshSimplifier
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Math
 {
     /// <summary>
     /// Math helpers.
@@ -109,7 +108,7 @@ namespace MeshEditor.UnityMeshSimplifier
         {
             var dx = p1 - p0;
             var dy = p2 - p0;
-            return dx.Magnitude * (Math.Sin(Vector3d.Angle(ref dx, ref dy) * Deg2Radd) * dy.Magnitude) * 0.5f;
+            return dx.Magnitude * (System.Math.Sin(Vector3d.Angle(ref dx, ref dy) * Deg2Radd) * dy.Magnitude) * 0.5f;
         }
         #endregion
     }

@@ -27,7 +27,7 @@ SOFTWARE.
 using System;
 using System.Runtime.CompilerServices;
 
-namespace MeshEditor.UnityMeshSimplifier
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Utility
 {
     /// <summary>
     /// A resizable array with the goal of being quicker than List<T>.

@@ -164,23 +164,28 @@ namespace TransformPro.MeshPro.MeshEditor.Editor
 
             GUILayout.BeginArea(new Rect(position.width / 4, 0, position.width * (3f / 4f), position.height));
 
-
-            foreach (var page in editorPages)
+            EditorGUILayout.BeginVertical(MEDR_StylesUtility.FrameStyle);
+            for (int i = 0; i < editorPages.Count; i++)
             {
+                var page = editorPages[i];
                 page.Open = EditorGUILayout.BeginFoldoutHeaderGroup(page.Open,
                     new GUIContent(page.PageName, page.PageIcon, page.PageToolTips),
                     MEDR_StylesUtility.FoldStyle);
                 if (page.Open)
                 {
-                    EditorGUILayout.BeginVertical(MEDR_StylesUtility.FrameStyle);
                     if (CheckItems != null && CheckItems.Count > 0)
+                    {
+                        page.scrollViewPos =
+                            EditorGUILayout.BeginScrollView(page.scrollViewPos, MEDR_StylesUtility.FrameStyle);
                         page.UpdateGUI();
-                    EditorGUILayout.EndVertical();
+                        EditorGUILayout.EndScrollView();
+                    }
                 }
 
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }
 
+            EditorGUILayout.EndVertical();
             GUILayout.EndArea();
         }
 

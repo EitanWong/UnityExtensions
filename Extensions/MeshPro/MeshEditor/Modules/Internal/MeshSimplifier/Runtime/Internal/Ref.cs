@@ -26,7 +26,7 @@ SOFTWARE.
 
 using System.Runtime.CompilerServices;
 
-namespace MeshEditor.UnityMeshSimplifier.Internal
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Internal
 {
     internal struct Ref
     {

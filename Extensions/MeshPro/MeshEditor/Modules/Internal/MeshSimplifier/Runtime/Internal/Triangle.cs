@@ -26,8 +26,9 @@ SOFTWARE.
 
 using System;
 using System.Runtime.CompilerServices;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Math;
 
-namespace MeshEditor.UnityMeshSimplifier.Internal
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Internal
 {
     internal struct Triangle : IEquatable<Triangle>
     {

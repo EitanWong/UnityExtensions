@@ -27,7 +27,7 @@ SOFTWARE.
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace MeshEditor.UnityMeshSimplifier.Internal
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Internal
 {
     internal class BlendShapeContainer
     {

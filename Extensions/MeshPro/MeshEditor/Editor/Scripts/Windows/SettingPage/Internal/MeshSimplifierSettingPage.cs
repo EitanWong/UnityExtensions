@@ -25,6 +25,15 @@ namespace MeshEditor.Editor.Scripts.Windows.SettingPage.Internal
             meshSimplifierRate = EditorGUILayout.Slider("压缩百分比:", meshSimplifierRate, 0f, 100f);
             meshSimplifierRate = meshSimplifierRate > 100 ? 100 : meshSimplifierRate < 0 ? 0 : meshSimplifierRate;
             _config.MEDR_MeshSimplifier_SimplifierRate = meshSimplifierRate;
+            EditorGUILayout.LabelField(string.Format("当前LOD保存地址:  {0}", _config.MEDR_MeshSimplifier_LODSavePath));
+            if (GUILayout.Button("设置保存地址"))
+            {
+                var path = EditorUtility.SaveFilePanelInProject("选择LOD网格保存目录", "LODs", "", "生成的LOD网格将保存在该目录下");
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    _config.MEDR_MeshSimplifier_LODSavePath = path;
+                }
+            }
         }
     }
 }

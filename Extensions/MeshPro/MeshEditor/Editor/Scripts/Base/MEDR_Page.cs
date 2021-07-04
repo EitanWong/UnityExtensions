@@ -20,6 +20,7 @@ namespace TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base
         }
 
         public bool Open = false;
+         public Vector2 scrollViewPos;
         public string PageName = "NewMeshEditorPage";//页面名称
         public string PageToolTips;
         public Texture2D PageIcon;//页面图标

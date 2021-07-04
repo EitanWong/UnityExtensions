@@ -1,4 +1,5 @@
 ﻿#region License
+
 /*
 MIT License
 
@@ -22,10 +23,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
 #endregion
 
 using System.Collections.Generic;
 using System.Linq;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime.Components;
 using UnityEngine;
 
 namespace MeshEditor.UnityMeshSimplifier
@@ -36,18 +40,21 @@ namespace MeshEditor.UnityMeshSimplifier
     public static class LODGenerator
     {
         #region Static Read-Only
+
         /// <summary>
         /// The name of the game object where generated LODs are parented under.
         /// </summary>
-        public static readonly string LODParentGameObjectName = "_UMS_LODs_";
+        public static readonly string LODParentGameObjectName = "LODs";
 
         /// <summary>
         /// The parent path for generated LOD assets.
         /// </summary>
-        public static readonly string LODAssetParentPath = "Assets/UMS_LODs/";
+        public static readonly string LODAssetParentPath = "Assets/LODs/";
+
         #endregion
 
         #region Nested Types
+
         private struct RendererInfo
         {
             public string name;
@@ -59,9 +66,11 @@ namespace MeshEditor.UnityMeshSimplifier
             public Transform rootBone;
             public Transform[] bones;
         }
+
         #endregion
 
         #region Public Methods
+
         /// <summary>
         /// Generates the LODs and sets up a LOD Group for the LOD generator helper component.
         /// </summary>
@@ -78,7 +87,8 @@ namespace MeshEditor.UnityMeshSimplifier
             var simplificationOptions = generatorHelper.SimplificationOptions;
             string saveAssetsPath = generatorHelper.SaveAssetsPath;
 
-            var lodGroup = GenerateLODs(gameObject, levels, autoCollectRenderers, simplificationOptions, saveAssetsPath);
+            var lodGroup = GenerateLODs(gameObject, levels, autoCollectRenderers, simplificationOptions,
+                saveAssetsPath);
             if (lodGroup == null)
                 return null;
 
@@ -96,7 +106,8 @@ namespace MeshEditor.UnityMeshSimplifier
         /// Enabling this will ignore any renderers defined under each LOD level.</param>
         /// <param name="simplificationOptions">The mesh simplification options.</param>
         /// <returns>The generated LOD Group.</returns>
-        public static LODGroup GenerateLODs(GameObject gameObject, LODLevel[] levels, bool autoCollectRenderers, SimplificationOptions simplificationOptions)
+        public static LODGroup GenerateLODs(GameObject gameObject, LODLevel[] levels, bool autoCollectRenderers,
+            SimplificationOptions simplificationOptions)
         {
             return GenerateLODs(gameObject, levels, autoCollectRenderers, simplificationOptions, null);
         }
@@ -111,7 +122,8 @@ namespace MeshEditor.UnityMeshSimplifier
         /// <param name="simplificationOptions">The mesh simplification options.</param>
         /// <param name="saveAssetsPath">The path to where the generated assets should be saved. Can be null or empty to use the default path.</param>
         /// <returns>The generated LOD Group.</returns>
-        public static LODGroup GenerateLODs(GameObject gameObject, LODLevel[] levels, bool autoCollectRenderers, SimplificationOptions simplificationOptions, string saveAssetsPath)
+        public static LODGroup GenerateLODs(GameObject gameObject, LODLevel[] levels, bool autoCollectRenderers,
+            SimplificationOptions simplificationOptions, string saveAssetsPath)
         {
             if (gameObject == null)
                 throw new System.ArgumentNullException(nameof(gameObject));
@@ -121,11 +133,13 @@ namespace MeshEditor.UnityMeshSimplifier
             var transform = gameObject.transform;
             var existingLodParent = transform.Find(LODParentGameObjectName);
             if (existingLodParent != null)
-                throw new System.InvalidOperationException("The game object already appears to have LODs. Please remove them first.");
+                throw new System.InvalidOperationException(
+                    "The game object already appears to have LODs. Please remove them first.");
 
             var existingLodGroup = gameObject.GetComponent<LODGroup>();
             if (existingLodGroup != null)
-                throw new System.InvalidOperationException("The game object already appears to have a LOD Group. Please remove it first.");
+                throw new System.InvalidOperationException(
+                    "The game object already appears to have a LOD Group. Please remove it first.");
 
             saveAssetsPath = ValidateSaveAssetsPath(saveAssetsPath);
 
@@ -152,20 +166,21 @@ namespace MeshEditor.UnityMeshSimplifier
                 ParentAndResetTransform(levelTransform, lodParent);
 
                 Renderer[] originalLevelRenderers = allRenderers ?? level.Renderers;
-                var levelRenderers = new List<Renderer>((originalLevelRenderers != null ? originalLevelRenderers.Length : 0));
+                var levelRenderers =
+                    new List<Renderer>((originalLevelRenderers != null ? originalLevelRenderers.Length : 0));
 
                 if (originalLevelRenderers != null && originalLevelRenderers.Length > 0)
                 {
                     var meshRenderers = (from renderer in originalLevelRenderers
-                                         let meshFilter = renderer.GetComponent<MeshFilter>()
-                                         where renderer.enabled && renderer as MeshRenderer != null
-                                         && meshFilter != null
-                                         && meshFilter.sharedMesh != null
-                                         select renderer as MeshRenderer).ToArray();
+                        let meshFilter = renderer.GetComponent<MeshFilter>()
+                        where renderer.enabled && renderer as MeshRenderer != null
+                                               && meshFilter != null
+                                               && meshFilter.sharedMesh != null
+                        select renderer as MeshRenderer).ToArray();
                     var skinnedMeshRenderers = (from renderer in originalLevelRenderers
-                                                where renderer.enabled && renderer as SkinnedMeshRenderer != null
-                                                && (renderer as SkinnedMeshRenderer).sharedMesh != null
-                                                select renderer as SkinnedMeshRenderer).ToArray();
+                        where renderer.enabled && renderer as SkinnedMeshRenderer != null
+                                               && (renderer as SkinnedMeshRenderer).sharedMesh != null
+                        select renderer as SkinnedMeshRenderer).ToArray();
 
                     RendererInfo[] staticRenderers;
                     RendererInfo[] skinnedRenderers;
@@ -185,7 +200,8 @@ namespace MeshEditor.UnityMeshSimplifier
                         for (int rendererIndex = 0; rendererIndex < staticRenderers.Length; rendererIndex++)
                         {
                             var renderer = staticRenderers[rendererIndex];
-                            var levelRenderer = CreateLevelRenderer(gameObject, levelIndex, ref level, levelTransform, rendererIndex, renderer, ref simplificationOptions, saveAssetsPath);
+                            var levelRenderer = CreateLevelRenderer(gameObject, levelIndex, ref level, levelTransform,
+                                rendererIndex, renderer, ref simplificationOptions, saveAssetsPath);
                             levelRenderers.Add(levelRenderer);
                         }
                     }
@@ -195,7 +211,8 @@ namespace MeshEditor.UnityMeshSimplifier
                         for (int rendererIndex = 0; rendererIndex < skinnedRenderers.Length; rendererIndex++)
                         {
                             var renderer = skinnedRenderers[rendererIndex];
-                            var levelRenderer = CreateLevelRenderer(gameObject, levelIndex, ref level, levelTransform, rendererIndex, renderer, ref simplificationOptions, saveAssetsPath);
+                            var levelRenderer = CreateLevelRenderer(gameObject, levelIndex, ref level, levelTransform,
+                                rendererIndex, renderer, ref simplificationOptions, saveAssetsPath);
                             levelRenderers.Add(levelRenderer);
                         }
                     }
@@ -220,6 +237,7 @@ namespace MeshEditor.UnityMeshSimplifier
 
             lodGroup.animateCrossFading = false;
             lodGroup.SetLODs(lods);
+            lodGroup.RecalculateBounds();
             return lodGroup;
         }
 
@@ -270,9 +288,11 @@ namespace MeshEditor.UnityMeshSimplifier
 
             return true;
         }
+
         #endregion
 
         #region Private Methods
+
         private static RendererInfo[] GetStaticRenderers(MeshRenderer[] renderers)
         {
             var newRenderers = new List<RendererInfo>(renderers.Length);
@@ -303,6 +323,7 @@ namespace MeshEditor.UnityMeshSimplifier
                     materials = renderer.sharedMaterials
                 });
             }
+
             return newRenderers.ToArray();
         }
 
@@ -332,6 +353,7 @@ namespace MeshEditor.UnityMeshSimplifier
                     bones = renderer.bones
                 });
             }
+
             return newRenderers.ToArray();
         }
 
@@ -363,7 +385,8 @@ namespace MeshEditor.UnityMeshSimplifier
             return newRenderers.ToArray();
         }
 
-        private static RendererInfo[] CombineSkinnedMeshes(Transform transform, int levelIndex, SkinnedMeshRenderer[] renderers)
+        private static RendererInfo[] CombineSkinnedMeshes(Transform transform, int levelIndex,
+            SkinnedMeshRenderer[] renderers)
         {
             if (renderers.Length == 0)
                 return null;
@@ -372,14 +395,14 @@ namespace MeshEditor.UnityMeshSimplifier
 
             var newRenderers = new List<RendererInfo>(renderers.Length);
             var blendShapeRenderers = (from renderer in renderers
-                                       where renderer.sharedMesh != null && renderer.sharedMesh.blendShapeCount > 0
-                                       select renderer);
+                where renderer.sharedMesh != null && renderer.sharedMesh.blendShapeCount > 0
+                select renderer);
             var renderersWithoutMesh = (from renderer in renderers
-                                        where renderer.sharedMesh == null
-                                        select renderer);
+                where renderer.sharedMesh == null
+                select renderer);
             var combineRenderers = (from renderer in renderers
-                                    where renderer.sharedMesh != null && renderer.sharedMesh.blendShapeCount == 0
-                                    select renderer).ToArray();
+                where renderer.sharedMesh != null && renderer.sharedMesh.blendShapeCount == 0
+                select renderer).ToArray();
 
             // Warn about renderers without a mesh
             foreach (var renderer in renderersWithoutMesh)
@@ -407,7 +430,8 @@ namespace MeshEditor.UnityMeshSimplifier
             {
                 Material[] combinedMaterials;
                 Transform[] combinedBones;
-                var combinedMesh = MeshCombiner.CombineMeshes(transform, combineRenderers, out combinedMaterials, out combinedBones);
+                var combinedMesh = MeshCombiner.CombineMeshes(transform, combineRenderers, out combinedMaterials,
+                    out combinedBones);
                 combinedMesh.name = string.Format("{0}_skinned{1:00}", transform.name, levelIndex);
 
                 var rootBone = FindBestRootBone(transform, combineRenderers);
@@ -436,7 +460,8 @@ namespace MeshEditor.UnityMeshSimplifier
             transform.localScale = Vector3.one;
         }
 
-        private static void ParentAndOffsetTransform(Transform transform, Transform parentTransform, Transform originalTransform)
+        private static void ParentAndOffsetTransform(Transform transform, Transform parentTransform,
+            Transform originalTransform)
         {
             transform.position = originalTransform.position;
             transform.rotation = originalTransform.rotation;
@@ -444,7 +469,9 @@ namespace MeshEditor.UnityMeshSimplifier
             transform.SetParent(parentTransform, true);
         }
 
-        private static Renderer CreateLevelRenderer(GameObject gameObject, int levelIndex, ref LODLevel level, Transform levelTransform, int rendererIndex, RendererInfo renderer, ref SimplificationOptions simplificationOptions, string saveAssetsPath)
+        private static Renderer CreateLevelRenderer(GameObject gameObject, int levelIndex, ref LODLevel level,
+            Transform levelTransform, int rendererIndex, RendererInfo renderer,
+            ref SimplificationOptions simplificationOptions, string saveAssetsPath)
         {
             var mesh = renderer.mesh;
 
@@ -466,16 +493,19 @@ namespace MeshEditor.UnityMeshSimplifier
             if (renderer.isStatic)
             {
                 string rendererName = string.Format("{0:000}_static_{1}", rendererIndex, renderer.name);
-                return CreateStaticLevelRenderer(rendererName, levelTransform, renderer.transform, mesh, renderer.materials, ref level);
+                return CreateStaticLevelRenderer(rendererName, levelTransform, renderer.transform, mesh,
+                    renderer.materials, ref level);
             }
             else
             {
                 string rendererName = string.Format("{0:000}_skinned_{1}", rendererIndex, renderer.name);
-                return CreateSkinnedLevelRenderer(rendererName, levelTransform, renderer.transform, mesh, renderer.materials, renderer.rootBone, renderer.bones, ref level);
+                return CreateSkinnedLevelRenderer(rendererName, levelTransform, renderer.transform, mesh,
+                    renderer.materials, renderer.rootBone, renderer.bones, ref level);
             }
         }
 
-        private static MeshRenderer CreateStaticLevelRenderer(string name, Transform parentTransform, Transform originalTransform, Mesh mesh, Material[] materials, ref LODLevel level)
+        private static MeshRenderer CreateStaticLevelRenderer(string name, Transform parentTransform,
+            Transform originalTransform, Mesh mesh, Material[] materials, ref LODLevel level)
         {
             var levelGameObject = new GameObject(name, typeof(MeshFilter), typeof(MeshRenderer));
             var levelTransform = levelGameObject.transform;
@@ -497,7 +527,9 @@ namespace MeshEditor.UnityMeshSimplifier
             return meshRenderer;
         }
 
-        private static SkinnedMeshRenderer CreateSkinnedLevelRenderer(string name, Transform parentTransform, Transform originalTransform, Mesh mesh, Material[] materials, Transform rootBone, Transform[] bones, ref LODLevel level)
+        private static SkinnedMeshRenderer CreateSkinnedLevelRenderer(string name, Transform parentTransform,
+            Transform originalTransform, Mesh mesh, Material[] materials, Transform rootBone, Transform[] bones,
+            ref LODLevel level)
         {
             var levelGameObject = new GameObject(name, typeof(SkinnedMeshRenderer));
             var levelTransform = levelGameObject.transform;
@@ -558,7 +590,7 @@ namespace MeshEditor.UnityMeshSimplifier
                 skinnedMeshRenderer.skinnedMotionVectors = level.SkinnedMotionVectors;
             }
         }
-        
+
         private static Renderer[] GetChildRenderersForLOD(GameObject gameObject)
         {
             var resultRenderers = new List<Renderer>();
@@ -597,15 +629,19 @@ namespace MeshEditor.UnityMeshSimplifier
 
         private static Mesh SimplifyMesh(Mesh mesh, float quality, SimplificationOptions options)
         {
-            var meshSimplifier = new MeshSimplifier();
-            meshSimplifier.PreserveBorderEdges = options.PreserveBorderEdges;
-            meshSimplifier.PreserveUVSeamEdges = options.PreserveUVSeamEdges;
-            meshSimplifier.PreserveUVFoldoverEdges = options.PreserveUVFoldoverEdges;
-            meshSimplifier.PreserveSurfaceCurvature = options.PreserveSurfaceCurvature;
-            meshSimplifier.EnableSmartLink = options.EnableSmartLink;
-            meshSimplifier.VertexLinkDistance = options.VertexLinkDistance;
-            meshSimplifier.MaxIterationCount = options.MaxIterationCount;
-            meshSimplifier.Agressiveness = options.Agressiveness;
+            var meshSimplifier = new MeshSimplifier
+            {
+#pragma warning disable 618
+                PreserveBorderEdges = options.PreserveBorderEdges,
+                PreserveUVSeamEdges = options.PreserveUVSeamEdges,
+                PreserveUVFoldoverEdges = options.PreserveUVFoldoverEdges,
+                PreserveSurfaceCurvature = options.PreserveSurfaceCurvature,
+                EnableSmartLink = options.EnableSmartLink,
+                VertexLinkDistance = options.VertexLinkDistance,
+                MaxIterationCount = options.MaxIterationCount,
+                Agressiveness = options.Agressiveness
+#pragma warning restore 618
+            };
             meshSimplifier.Initialize(mesh);
             meshSimplifier.SimplifyMesh(quality);
 
@@ -635,9 +671,13 @@ namespace MeshEditor.UnityMeshSimplifier
 
         private static void CreateBackup(GameObject gameObject, Renderer[] originalRenderers)
         {
+            if (!gameObject) return;
             var backupComponent = gameObject.AddComponent<LODBackupComponent>();
-            backupComponent.hideFlags = HideFlags.HideInInspector;
-            backupComponent.OriginalRenderers = originalRenderers;
+            if (backupComponent)
+            {
+                backupComponent.hideFlags = HideFlags.HideInInspector;
+                backupComponent.OriginalRenderers = originalRenderers;
+            }
         }
 
         private static void RestoreBackup(GameObject gameObject)
@@ -656,6 +696,7 @@ namespace MeshEditor.UnityMeshSimplifier
                         }
                     }
                 }
+
                 DestroyObject(backupComponent);
             }
         }
@@ -672,7 +713,8 @@ namespace MeshEditor.UnityMeshSimplifier
             if (System.IO.Path.IsPathRooted(saveAssetsPath))
                 throw new System.InvalidOperationException("The save assets path cannot be rooted.");
             else if (saveAssetsPath.Length > 100)
-                throw new System.InvalidOperationException("The save assets path cannot be more than 100 characters long to avoid I/O issues.");
+                throw new System.InvalidOperationException(
+                    "The save assets path cannot be more than 100 characters long to avoid I/O issues.");
 
             // Make the path safe
             var pathParts = saveAssetsPath.Split('/');
@@ -680,6 +722,7 @@ namespace MeshEditor.UnityMeshSimplifier
             {
                 pathParts[i] = MakePathSafe(pathParts[i]);
             }
+
             saveAssetsPath = string.Join("/", pathParts);
 
             return saveAssetsPath;
@@ -690,8 +733,10 @@ namespace MeshEditor.UnityMeshSimplifier
         }
 
         #region Editor Functions
+
 #if UNITY_EDITOR
-        private static void SaveLODMeshAsset(Object asset, string gameObjectName, string rendererName, int levelIndex, string meshName, string saveAssetsPath)
+        private static void SaveLODMeshAsset(Object asset, string gameObjectName, string rendererName, int levelIndex,
+            string meshName, string saveAssetsPath)
         {
             gameObjectName = MakePathSafe(gameObjectName);
             rendererName = MakePathSafe(rendererName);
@@ -831,7 +876,7 @@ namespace MeshEditor.UnityMeshSimplifier
             else if (!UnityEditor.AssetDatabase.IsValidFolder(path))
                 return true;
 
-            string[] assetGuids = UnityEditor.AssetDatabase.FindAssets(string.Empty, new string[] { path });
+            string[] assetGuids = UnityEditor.AssetDatabase.FindAssets(string.Empty, new string[] {path});
             if (assetGuids.Length > 0)
                 return false;
 
@@ -867,10 +912,13 @@ namespace MeshEditor.UnityMeshSimplifier
                     }
                 }
             }
+
             return sb.ToString();
         }
 #endif
+
         #endregion
+
         #endregion
     }
 }

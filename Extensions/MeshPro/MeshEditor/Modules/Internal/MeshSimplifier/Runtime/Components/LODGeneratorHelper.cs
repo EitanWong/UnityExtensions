@@ -24,6 +24,7 @@ SOFTWARE.
 */
 #endregion
 
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime;
 using UnityEngine;
 
 namespace MeshEditor.UnityMeshSimplifier

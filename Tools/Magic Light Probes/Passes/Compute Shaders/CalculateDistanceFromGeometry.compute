@@ -1,0 +1,12 @@
+﻿#pragma kernel CSMain
+ 
+uniform RWStructuredBuffer<float3> inputArray : register(u1);
+uniform RWStructuredBuffer<float3> exitArray : register(u2);
+uniform RWStructuredBuffer<float3> directionsArray : register(u3);
+float distance;
+ 
+[numthreads(256, 1, 1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    exitArray[id.x] += directionsArray[id.x] * distance;
+}
