@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 
 namespace MagicLightProbes
 {
@@ -20,3 +21,4 @@ namespace MagicLightProbes
         }
     }
 }
+#endif

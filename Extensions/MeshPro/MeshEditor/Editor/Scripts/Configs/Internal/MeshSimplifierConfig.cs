@@ -1,64 +1,66 @@
-using System.Collections;
-using System.Collections.Generic;
-using MeshEditor.Editor.Scripts.Base;
-using UnityEngine;
+#if UNITY_EDITOR
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Base;
 
-public class MeshSimplifierConfig : MEDR_Config
+namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Configs.Internal
 {
-    // ReSharper disable once InconsistentNaming
-    public float MEDR_MeshSimplifier_SimplifierRate
+    public class MeshSimplifierConfig : MEDR_Config
     {
-        get
+        // ReSharper disable once InconsistentNaming
+        public float MEDR_MeshSimplifier_SimplifierRate
         {
-            float value = 25;
-            GetConfig(nameof(MEDR_MeshSimplifier_SimplifierRate), ref value);
-            return value;
+            get
+            {
+                float value = 25;
+                GetConfig(nameof(MEDR_MeshSimplifier_SimplifierRate), ref value);
+                return value;
+            }
+            set { SaveConfig(nameof(MEDR_MeshSimplifier_SimplifierRate), value); }
         }
-        set { SaveConfig(nameof(MEDR_MeshSimplifier_SimplifierRate), value); }
-    }
-    // ReSharper disable once InconsistentNaming
-    public int MEDR_MeshSimplifier_DetailsCount
-    {
-        get
+        // ReSharper disable once InconsistentNaming
+        public int MEDR_MeshSimplifier_DetailsCount
         {
-            int value = 8;
-            GetConfig(nameof(MEDR_MeshSimplifier_DetailsCount), ref value);
-            return value;
+            get
+            {
+                int value = 8;
+                GetConfig(nameof(MEDR_MeshSimplifier_DetailsCount), ref value);
+                return value;
+            }
+            set { SaveConfig(nameof(MEDR_MeshSimplifier_DetailsCount), value); }
         }
-        set { SaveConfig(nameof(MEDR_MeshSimplifier_DetailsCount), value); }
-    }
     
-    public float MEDR_MeshSimplifier_LODDistanceMultiplier
-    {
-        get
+        public float MEDR_MeshSimplifier_LODDistanceMultiplier
         {
-            float value = 0.5f;
-            GetConfig(nameof(MEDR_MeshSimplifier_LODDistanceMultiplier), ref value);
-            return value;
+            get
+            {
+                float value = 0.5f;
+                GetConfig(nameof(MEDR_MeshSimplifier_LODDistanceMultiplier), ref value);
+                return value;
+            }
+            set { SaveConfig(nameof(MEDR_MeshSimplifier_LODDistanceMultiplier), value); }
         }
-        set { SaveConfig(nameof(MEDR_MeshSimplifier_LODDistanceMultiplier), value); }
-    }
     
-    // ReSharper disable once InconsistentNaming
-    public int MEDR_MeshSimplifier_LODGroupFadeMode
-    {
-        get
+        // ReSharper disable once InconsistentNaming
+        public int MEDR_MeshSimplifier_LODGroupFadeMode
         {
-            int value = 0;
-            GetConfig(nameof(MEDR_MeshSimplifier_LODGroupFadeMode), ref value);
-            return value;
+            get
+            {
+                int value = 0;
+                GetConfig(nameof(MEDR_MeshSimplifier_LODGroupFadeMode), ref value);
+                return value;
+            }
+            set { SaveConfig(nameof(MEDR_MeshSimplifier_LODGroupFadeMode), value); }
         }
-        set { SaveConfig(nameof(MEDR_MeshSimplifier_LODGroupFadeMode), value); }
-    }
-    // ReSharper disable once InconsistentNaming
-    public string MEDR_MeshSimplifier_LODSavePath
-    {
-        get
+        // ReSharper disable once InconsistentNaming
+        public string MEDR_MeshSimplifier_LODSavePath
         {
-            string value = "Assets/LODs";
-            GetConfig(nameof(MEDR_MeshSimplifier_LODSavePath), ref value);
-            return value;
+            get
+            {
+                string value = "Assets/LODs";
+                GetConfig(nameof(MEDR_MeshSimplifier_LODSavePath), ref value);
+                return value;
+            }
+            set { SaveConfig(nameof(MEDR_MeshSimplifier_LODSavePath), value); }
         }
-        set { SaveConfig(nameof(MEDR_MeshSimplifier_LODSavePath), value); }
     }
 }
+#endif

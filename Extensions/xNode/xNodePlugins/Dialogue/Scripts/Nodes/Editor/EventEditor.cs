@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Dialogue;
+﻿#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using XNodeEditor;
@@ -25,3 +23,4 @@ namespace DialogueEditor {
         }
     }
 }
+#endif

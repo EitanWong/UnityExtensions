@@ -1,9 +1,10 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base
+namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Base.Utilities
 {
     public static class MEDR_Internal_Utility
     {
@@ -57,3 +58,4 @@ namespace TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base
         }
     }
 }
+#endif

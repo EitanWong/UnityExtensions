@@ -1,9 +1,9 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
-using MeshEditor.Editor.Scripts.Base;
-using MeshEditor.Editor.Scripts.Configs.Internal;
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Base;
 
-namespace MeshEditor.Editor.Scripts.Manager
+namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Manager
 {
     // ReSharper disable once InconsistentNaming
     public static class MEDR_ConfigManager
@@ -37,3 +37,4 @@ namespace MeshEditor.Editor.Scripts.Manager
         }
     }
 }
+#endif

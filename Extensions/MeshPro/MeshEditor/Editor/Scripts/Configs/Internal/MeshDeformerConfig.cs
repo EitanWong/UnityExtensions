@@ -1,4 +1,5 @@
-using Extensions.MeshPro.MeshEditor.Editor.Scripts.Windows.WindowPage.Internal;
+#if UNITY_EDITOR
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Base;
 using MeshEditor.Editor.Scripts.Base;
 using UnityEngine;
 
@@ -113,3 +114,4 @@ namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Configs.Internal
         }
     }
 }
+#endif

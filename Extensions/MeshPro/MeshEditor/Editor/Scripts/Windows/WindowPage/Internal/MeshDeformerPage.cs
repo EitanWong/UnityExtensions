@@ -1,8 +1,7 @@
-using System;
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using Extensions.MeshPro.MeshEditor.Editor.Scripts.Configs.Internal;
-using MeshEditor.Editor.Scripts.Base.Utilities;
-using MeshEditor.Editor.Scripts.Manager;
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Manager;
 using TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base;
 using UnityEditor;
 using UnityEngine;
@@ -212,3 +211,4 @@ namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Windows.WindowPage.Intern
         #endregion
     }
 }
+#endif

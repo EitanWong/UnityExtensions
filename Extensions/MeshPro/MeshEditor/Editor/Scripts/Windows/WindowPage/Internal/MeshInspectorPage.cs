@@ -1,5 +1,4 @@
-using System;
-using UnityEditor;
+#if UNITY_EDITOR
 using UnityEngine;
 using TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base;
 
@@ -23,3 +22,4 @@ public class MeshInspectorPage : MEDR_Page
             uvLensEditorWindow.Open();
     }
 }
+#endif

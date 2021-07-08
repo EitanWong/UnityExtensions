@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using N3dBoolExample;
-using Net3dBool;
+#if UNITY_EDITOR
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshBoolean.Scripts;
 using UnityEditor;
 using UnityEngine;
 using TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base;
@@ -134,3 +131,4 @@ public class MeshBooleanPage : MEDR_Page
         Subtraction,
     }
 }
+#endif

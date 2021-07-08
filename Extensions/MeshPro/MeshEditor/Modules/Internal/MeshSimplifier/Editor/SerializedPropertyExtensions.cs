@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #endregion
-
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
 
@@ -48,3 +48,4 @@ namespace MeshEditor.UnityMeshSimplifier.Editor
         }
     }
 }
+#endif

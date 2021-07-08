@@ -1,11 +1,11 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
-using TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base;
 
-namespace MeshEditor.Editor.Scripts.Base
+namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Base
 {
     public abstract class MEDR_Config
     {
@@ -64,3 +64,4 @@ namespace MeshEditor.Editor.Scripts.Base
         }
     }
 }
+#endif

@@ -1,7 +1,6 @@
+#if UNITY_EDITOR
 using UnityEngine;
-using System.Collections;
 using UnityEditor;
-using EzySlice;
 
 /**
  * This is a simple Editor helper script for rapid testing/prototyping! 
@@ -45,4 +44,4 @@ public class ShatterExampleEditor : Editor {
         }
     }
 }
-
+#endif

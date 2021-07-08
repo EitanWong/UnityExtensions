@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿#if UNITY_EDITOR
+using UnityEditor;
 using UnityEngine;
 
 using CharacterInfo = Dialogue.CharacterInfo;
@@ -60,3 +61,4 @@ namespace Dialogue {
 		}
 	}
 }
+#endif

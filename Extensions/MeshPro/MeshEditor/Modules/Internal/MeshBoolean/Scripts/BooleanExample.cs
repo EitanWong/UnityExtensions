@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿#if UNITY_EDITOR
 using UnityEngine;
-using Net3dBool;
 
-namespace N3dBoolExample {
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshBoolean.Scripts {
     public class BooleanExample : MonoBehaviour
     {
         public MeshFilter meshFa;
@@ -31,3 +29,4 @@ namespace N3dBoolExample {
         }
     }
 }
+#endif

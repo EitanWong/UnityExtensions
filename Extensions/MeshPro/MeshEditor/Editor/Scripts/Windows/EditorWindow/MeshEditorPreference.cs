@@ -1,11 +1,10 @@
-using System;
-using System.Collections;
+#if UNITY_EDITOR
 using System.Collections.Generic;
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Base.Utilities;
 using MeshEditor.Editor.Scripts.Base;
 using MeshEditor.Editor.Scripts.Base.Utilities;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
 using TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base;
 
 public class MeshEditorPreference : Editor
@@ -135,3 +134,4 @@ public class MeshEditorPreference : Editor
 
     #endregion
 }
+#endif

@@ -34,13 +34,14 @@ Project: https://github.com/Arakis/Net3dBool
 Optimized and refactored by: Lars Brubaker (larsbrubaker@matterhackers.com)
 Project: https://github.com/MatterHackers/agg-sharp (an included library)
 */
-
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Net3dBool;
 using Net3dBool.CommonTool;
 
-namespace Net3dBool
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshBoolean.Scripts.Net3DBool.Core
 {
     /// <summary>
     /// 为<see cref="Solid"/>实例应用集合运算的类；
@@ -216,3 +217,4 @@ namespace Net3dBool
         #endregion
     }
 }
+#endif

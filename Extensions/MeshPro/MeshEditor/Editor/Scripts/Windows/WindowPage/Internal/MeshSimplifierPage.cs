@@ -1,12 +1,13 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Configs.Internal;
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Manager;
 using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshSimplifier.Runtime;
-using MeshEditor.Editor.Scripts.Manager;
 using TransformPro.MeshPro.MeshEditor.Editor;
 using TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class MeshSimplifierPage : MEDR_Page
@@ -206,7 +207,7 @@ public class MeshSimplifierPage : MEDR_Page
                     lodGroup.SetLODs(lods);
                     lodGroup.RecalculateBounds();
                     //DestroyImmediate(item.Renderer);
-                    EditorSceneManager.MarkSceneDirty(item.Filter.gameObject.scene);
+                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(item.Filter.gameObject.scene);
                 }
             }
             catch (Exception ex)
@@ -297,3 +298,4 @@ public class MeshSimplifierPage : MEDR_Page
         return mesh;
     }
 }
+#endif

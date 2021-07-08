@@ -1,8 +1,8 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
-using TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base;
 
-namespace MeshEditor.Editor.Scripts.Base.Utilities
+namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Base.Utilities
 {
     public static class MEDR_StylesUtility
     {
@@ -23,3 +23,4 @@ namespace MeshEditor.Editor.Scripts.Base.Utilities
         #endregion
     }
 }
+#endif

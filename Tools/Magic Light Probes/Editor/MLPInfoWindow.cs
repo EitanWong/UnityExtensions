@@ -1,4 +1,5 @@
-﻿using MagicLightProbes;
+﻿#if UNITY_EDITOR
+using MagicLightProbes;
 using UnityEditor;
 using UnityEngine;
 
@@ -315,3 +316,4 @@ public class MLPInfoWindow : EditorWindow
         GUILayout.EndVertical();
     }
 }
+#endif

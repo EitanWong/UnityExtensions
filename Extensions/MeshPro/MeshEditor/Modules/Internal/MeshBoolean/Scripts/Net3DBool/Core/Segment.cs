@@ -34,12 +34,10 @@ Project: https://github.com/Arakis/Net3dBool
 Optimized and refactored by: Lars Brubaker (larsbrubaker@matterhackers.com)
 Project: https://github.com/MatterHackers/agg-sharp (an included library)
 */
+#if UNITY_EDITOR
+using Net3dBool;
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace Net3dBool
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshBoolean.Scripts.Net3DBool.Core
 {
     /// <summary>
     /// 定义平面之间交线的线段
@@ -289,4 +287,4 @@ namespace Net3dBool
         }
     }
 }
-
+#endif

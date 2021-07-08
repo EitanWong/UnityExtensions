@@ -1,8 +1,8 @@
-using System.Data;
-using MeshEditor.Editor.Scripts.Base;
+#if UNITY_EDITOR
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Base;
 using UnityEngine;
 
-namespace MeshEditor.Editor.Scripts.Configs.Internal
+namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Configs.Internal
 {
     public class MeshBreakerConfig : MEDR_Config
     {
@@ -53,3 +53,4 @@ namespace MeshEditor.Editor.Scripts.Configs.Internal
         }
     }
 }
+#endif

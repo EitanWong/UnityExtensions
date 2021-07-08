@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 namespace MeshEditor.Editor.Scripts.Base
 {
     public abstract class MEDR_SettingPage: UnityEditor.Editor
@@ -13,3 +14,4 @@ namespace MeshEditor.Editor.Scripts.Base
         protected abstract void OnGUI();
     }
 }
+#endif

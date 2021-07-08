@@ -34,12 +34,13 @@ Project: https://github.com/Arakis/Net3dBool
 Optimized and refactored by: Lars Brubaker (larsbrubaker@matterhackers.com)
 Project: https://github.com/MatterHackers/agg-sharp (an included library)
 */
-
-using Net3dBool.CommonTool;
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
+using Net3dBool;
+using Net3dBool.CommonTool;
 
-namespace Net3dBool
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshBoolean.Scripts.Net3DBool.Core
 {
     /// <summary>
     /// 表示 3D 面的顶点
@@ -174,4 +175,4 @@ namespace Net3dBool
         #endregion
     }
 }
-
+#endif

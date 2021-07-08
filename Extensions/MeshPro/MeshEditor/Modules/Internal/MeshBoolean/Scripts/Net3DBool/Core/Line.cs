@@ -34,10 +34,12 @@ Project: https://github.com/Arakis/Net3dBool
 Optimized and refactored by: Lars Brubaker (larsbrubaker@matterhackers.com)
 Project: https://github.com/MatterHackers/agg-sharp (an included library)
 */
+#if UNITY_EDITOR
 
 using System;
+using Net3dBool;
 
-namespace Net3dBool
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshBoolean.Scripts.Net3DBool.Core
 {
     /// <summary>
     /// 由起点位置和方向表示的 3D 直线或射线
@@ -216,3 +218,4 @@ namespace Net3dBool
         }
     }
 }
+#endif

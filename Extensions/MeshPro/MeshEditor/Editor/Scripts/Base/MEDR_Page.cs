@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -131,3 +132,4 @@ namespace TransformPro.MeshPro.MeshEditor.Editor.Scripts.Base
         #endregion
     }
 }
+#endif

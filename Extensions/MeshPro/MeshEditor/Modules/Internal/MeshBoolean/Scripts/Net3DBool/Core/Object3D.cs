@@ -34,12 +34,12 @@ Project: https://github.com/Arakis/Net3dBool
 Optimized and refactored by: Lars Brubaker (larsbrubaker@matterhackers.com)
 Project: https://github.com/MatterHackers/agg-sharp (an included library)
 */
-
+#if UNITY_EDITOR
 using System;
-using System.Collections.Generic;
+using Net3dBool;
 using Net3dBool.CommonTool;
 
-namespace Net3dBool
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshBoolean.Scripts.Net3DBool.Core
 {
     /// <summary>
     /// Data structure about a 3d solid to apply boolean operations in it.
@@ -808,3 +808,4 @@ namespace Net3dBool
         #endregion
     }
 }
+#endif

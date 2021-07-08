@@ -1,6 +1,7 @@
-using MeshEditor.Editor.Scripts.Base;
+#if UNITY_EDITOR
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Base;
 
-namespace MeshEditor.Editor.Scripts.Configs.Internal
+namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Configs.Internal
 {
     public class MeshVoxelizerConfig : MEDR_Config
     {
@@ -29,3 +30,4 @@ namespace MeshEditor.Editor.Scripts.Configs.Internal
         }
     }
 }
+#endif

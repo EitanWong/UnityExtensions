@@ -1,11 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿#if UNITY_EDITOR
 using System.Linq;
-using UnityEngine;
+using Extensions.MeshPro.MeshEditor.Modules.Internal.MeshBoolean.Scripts.Net3DBool.Core;
 using Net3dBool;
 using Net3dBool.CommonTool;
+using UnityEngine;
 
-namespace N3dBoolExample
+namespace Extensions.MeshPro.MeshEditor.Modules.Internal.MeshBoolean.Scripts
 {
     public static class MeshBooleanOperator
     {
@@ -66,3 +66,4 @@ namespace N3dBoolExample
         }
     }
 }
+#endif

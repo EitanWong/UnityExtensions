@@ -1,11 +1,13 @@
-using System;
+#if UNITY_EDITOR
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Base.Utilities;
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Configs.Internal;
+using Extensions.MeshPro.MeshEditor.Editor.Scripts.Manager;
 using MeshEditor.Editor.Scripts.Base;
 using MeshEditor.Editor.Scripts.Base.Utilities;
-using MeshEditor.Editor.Scripts.Manager;
 using UnityEditor;
 using UnityEngine;
 
-namespace MeshEditor.Editor.Scripts.Windows.SettingPage.Internal
+namespace Extensions.MeshPro.MeshEditor.Editor.Scripts.Windows.SettingPage.Internal
 {
     public class MeshSimplifierSettingPage : MEDR_SettingPage
     {
@@ -37,3 +39,4 @@ namespace MeshEditor.Editor.Scripts.Windows.SettingPage.Internal
         }
     }
 }
+#endif
