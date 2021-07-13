@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Reflection;
 using UnityEngine;
 
@@ -423,7 +424,8 @@ namespace TransformPro.Scripts
                 EditorGUILayout.BeginVertical(FrameBoxStyle);
                 // ReSharper disable once Unity.NoNullPropagation
 #if UNITY_EDITOR
-                _defaultEditor.OnInspectorGUI();
+                if (_defaultEditor)
+                    _defaultEditor.OnInspectorGUI();
 #endif
 
 
@@ -575,3 +577,4 @@ namespace TransformPro.Scripts
         }
     }
 }
+#endif

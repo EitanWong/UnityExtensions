@@ -266,7 +266,9 @@ public class MeshSimplifierPage : MEDR_Page
                 Directory.CreateDirectory(url); //创建该文件夹
             return true;
         }
+#pragma warning disable 168
         catch (Exception ex)
+#pragma warning restore 168
         {
             return false;
         }

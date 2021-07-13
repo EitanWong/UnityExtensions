@@ -213,7 +213,7 @@ namespace MeshEditor.Editor.Scripts.Windows.WindowPage.Internal
 
                 if (slices != null)
                 {
-                    // shatter the shattered!
+                    // shatter the shattered! 
                     for (int i = 0; i < slices.Length; i++)
                     {
                         slices[i].transform.SetParent(root);

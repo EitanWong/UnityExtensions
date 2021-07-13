@@ -1,15 +1,12 @@
 ﻿using System;
-using NightOwl.macOS;
 using NightOwl.Schedule;
 using NightOwl.Schedule.ScheduledItems;
-using UnityEngine;
 using UnityEditor;
-using UnityEditorInternal;
 
 #if UNITY_EDITOR_WIN
 using AutoDarkTheme.Windows;
 #elif UNITY_EDITOR_OSX
-
+using NightOwl.macOS;
 #endif
 
 namespace NightOwl

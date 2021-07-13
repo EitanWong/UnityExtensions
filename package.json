@@ -4,7 +4,7 @@
   "displayName": "UnityExtensions",
   "description": "Unity\u7f16\u8f91\u5668\u6269\u5c55\u589e\u5f3a\u63d2\u4ef6\u5305\n\u63d0\u4f9b\u4e86\u66f4\u591a\u66f4\u5b8c\u5584\u7684\u5de5\u5177\u94fe\n\u8ba9\u4f60\u62e5\u6709\u66f4\u8212\u9002\u5230\u5f00\u53d1\u4f53\u9a8c",
   "unity": "2021.1",
-  "unityRelease": "10f1",
+  "unityRelease": "14f1",
   "keywords": [
     "unityex",
     "ex",
@@ -22,5 +22,6 @@
     "name": "LONE",
     "email": "null",
     "url": "https://www.unity.com"
-  }
+  },
+  "type": "tool"
 }
